@@ -61,6 +61,7 @@ public class Game implements Runnable {
      * initializing the display window of the game
      */
     private void init() {
+        Assets.init();
         display = new Display(title, getWidth(), getHeight());
     }
 
@@ -111,7 +112,7 @@ public class Game implements Runnable {
             display.getCanvas().createBufferStrategy(3);
         } else {
             g = bs.getDrawGraphics();
-//            g.drawImage(Assets.background, 0, 0, width, height, null);
+            g.drawImage(Assets.background, 0, 0, width, height, null);
             bs.show();
             g.dispose();
         }
