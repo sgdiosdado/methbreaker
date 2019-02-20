@@ -10,7 +10,7 @@ import java.awt.event.KeyListener;
 
 /**
  *
- * @author antoniomejorado
+ * @author inakijaneiro
  */
 public class KeyManager implements KeyListener {
     
@@ -18,13 +18,18 @@ public class KeyManager implements KeyListener {
     public boolean down;    // flag to move down the player
     public boolean left;    // flag to move left the player
     public boolean right;   // flag to move right the player
+    public static boolean rightReleased;
+    public static boolean leftReleased;
+    public static boolean upReleased;
+    public static boolean downReleased;
 
-    private boolean keys[];  // to store all the flags for every key
     
+    private boolean keys[]; // to store all the flags for every key
+
     public KeyManager() {
         keys = new boolean[256];
     }
-    
+
     @Override
     public void keyTyped(KeyEvent e) {
     }
@@ -50,4 +55,5 @@ public class KeyManager implements KeyListener {
         left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
     }
+    
 }
