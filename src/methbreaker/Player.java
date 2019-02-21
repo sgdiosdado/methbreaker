@@ -13,16 +13,12 @@ import java.awt.Graphics;
  */
 public class Player extends Item {
 
-    private int width;
-    private int height;
     private Game game;
     private int speed;
     private Animation currentAnimation;
 
     public Player(int x, int y, int direction, int width, int height, Game game) {
-        super(x, y);
-        this.width = width;
-        this.height = height;
+        super(x, y, width, height);
         this.game = game;
         this.speed = 1;
         currentAnimation = new Animation(Assets.playerRight, 100);
@@ -74,21 +70,17 @@ public class Player extends Item {
         currentAnimation.tick();
         // moving player depending on flags
         if (game.getKeyManager().left) {
-           setX(getX() - 3);
+            setX(getX() - 3);
         }
         if (game.getKeyManager().right) {
-           setX(getX() + 3);
+            setX(getX() + 3);
         }
 
         // reset x position and y position if colision
         if (getX() + 80 > game.getWidth()) { // right side
             setX(game.getWidth() - 80);
-            currentAnimation.setIndex(0);
-            currentAnimation.setSpeed(150);
         } else if (getX() < -20) { // left side
             setX(-20);
-            currentAnimation.setIndex(0);
-            currentAnimation.setSpeed(150);
         }
     }
 
