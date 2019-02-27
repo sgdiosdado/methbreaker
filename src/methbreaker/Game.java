@@ -16,6 +16,7 @@ import java.util.LinkedList;
  */
 public class Game implements Runnable {
 
+    private final int PADDING;              // constant for the padding of the videogame
     private BufferStrategy bs;              //to have several buffers when displaying
     private Graphics g;                     //to paint objects
     private Display display;                //to display in the game 
@@ -27,7 +28,8 @@ public class Game implements Runnable {
     private Player player;                  // to use a player
     private KeyManager keyManager;          // to manage the keyboard
     private LinkedList<Meth> methbricks;    // to store a set of meth bricks
-    
+    private Ball ball;
+
     /**
      * to	create	title,	width	and	height	and	set	the	game	is	still	not	running
      *
@@ -42,11 +44,13 @@ public class Game implements Runnable {
         running = false;
         keyManager = new KeyManager();
         methbricks = new LinkedList<Meth>();
+        this.PADDING = 30;
     }
-    
+
     /**
      * To get the width of the game window
-     * @return  an <code>int</code> value with the width
+     *
+     * @return an <code>int</code> value with the width
      */
     public int getWidth() {
         return width;
@@ -54,6 +58,7 @@ public class Game implements Runnable {
 
     /**
      * To get the height of the game window
+     *
      * @return an <code>int</code> value with the height
      */
     public int getHeight() {
@@ -63,22 +68,28 @@ public class Game implements Runnable {
     public KeyManager getKeyManager() {
         return keyManager;
     }
-   /* 
+
+    public Ball getBall() {
+        return ball;
+    }
+
+    /* 
     public MouseManager getMouseManager() {
         return mouseManager;
     }
-    */
+     */
     /**
      * Initialising the display window of the game
      */
     private void init() {
         display = new Display(title, width, height);
         Assets.init();
-        player = new Player(getWidth()/2 - getWidth()/14, getHeight() - 58, 1, getWidth()/7, 29, this);
+        player = new Player(getWidth() / 2 - getWidth() / 14, getHeight() - (PADDING * 2), 1, getWidth() / 7, PADDING, this);
+        ball = new Ball((player.getX() + (player.getWidth())/2) - 16, player.getY() - 32, 32, 32, this);
         display.getJframe().addKeyListener(keyManager);
-        for(int i = 0; i < 5; i++){
-            for(int j = 0; j < 15; j++){
-                methbricks.add(new Meth(29 + 64 * i, 29 + 64 * i, 64, 64, this));
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 19; j++) {
+                methbricks.add(new Meth(PADDING + 64 * j, PADDING + i * 64, 64, 64, this));
             }
         }
     }
@@ -104,21 +115,21 @@ public class Game implements Runnable {
             delta += (now - lastTime) / timeTick;
             //updating the last time
             lastTime = now;
-            
+
             // if delta is positive we tick the game
             if (delta >= 1) {
                 tick();
                 render();
                 delta--;
-            } 
+            }
         }
         stop();
     }
 
-   private void tick() {
-       keyManager.tick();
-       //avancing a player with colision
-       player.tick();
+    private void tick() {
+        keyManager.tick();
+        //avancing a player with colision
+        player.tick();
     }
 
     private void render() {
@@ -136,14 +147,15 @@ public class Game implements Runnable {
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height, null);
             player.render(g);
-            for(int i = 0; i < 5; i++){
+            ball.render(g);
+            for (int i = 0; i < methbricks.size(); i++) {
                 methbricks.get(i).render(g);
             }
             //g.drawImage(Assets.player, x, height - 100, 100, 100, null);
             /* g.clearRect(0, 0, width, height);
             g.setColor(Color.red);
             g.drawRect(10, 10, 40, 40);
-            */
+             */
             bs.show();
             g.dispose();
         }

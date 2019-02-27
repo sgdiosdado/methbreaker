@@ -17,6 +17,7 @@ public class Assets {
     public static BufferedImage player[]; // pictures to go right
     public static BufferedImage sprites; // to store the sprites
     public static BufferedImage methbrick;
+    public static BufferedImage ball;
 
 
     /**
@@ -26,6 +27,7 @@ public class Assets {
         background = ImageLoader.loadImage("/images/desert_background.png");
         sprites = ImageLoader.loadImage("/images/hank_bar.png");
         methbrick = ImageLoader.loadImage("/images/methbrick.png");
+        ball = ImageLoader.loadImage("/images/pizza.png");
         // Creating array of images before animations
         SpriteSheet spritesheet = new SpriteSheet(sprites);
         player = new BufferedImage[2];
