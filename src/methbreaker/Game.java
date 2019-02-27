@@ -8,6 +8,7 @@ package methbreaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.LinkedList;
 
 /**
  *
@@ -15,19 +16,18 @@ import java.awt.image.BufferStrategy;
  */
 public class Game implements Runnable {
 
-    private BufferStrategy bs; //to have several buffers when displaying
-    private Graphics g; //to paint objects
-    private Display display; //to display in the game 
-    private String title; //title of the window
-    private int width; //width of the window
-    private int height; //height of the window
-    private Thread thread; //thread to create the game
-    private boolean running; //to set the game
-    //private int x; // to move image
-    //private int direction; // to set the direction of the player
-    private Player player; // to use a player
-    private KeyManager keyManager; // to manage the keyboard
-    //private MouseManager mouseManager; // to manage the mouse
+    private BufferStrategy bs;              //to have several buffers when displaying
+    private Graphics g;                     //to paint objects
+    private Display display;                //to display in the game 
+    private String title;                   //title of the window
+    private int width;                      //width of the window
+    private int height;                     //height of the window
+    private Thread thread;                  //thread to create the game
+    private boolean running;                //to set the game
+    private Player player;                  // to use a player
+    private KeyManager keyManager;          // to manage the keyboard
+    private LinkedList<Meth> methbricks;    // to store a set of meth bricks
+    
     /**
      * to	create	title,	width	and	height	and	set	the	game	is	still	not	running
      *
@@ -41,7 +41,7 @@ public class Game implements Runnable {
         this.height = height;
         running = false;
         keyManager = new KeyManager();
-        //mouseManager = new MouseManager();
+        methbricks = new LinkedList<Meth>();
     }
     
     /**
@@ -69,18 +69,18 @@ public class Game implements Runnable {
     }
     */
     /**
-     * initializing the display window of the game
+     * Initialising the display window of the game
      */
     private void init() {
         display = new Display(title, width, height);
         Assets.init();
-        player = new Player(0, getHeight() - 100, 1, 100, 100, this);
+        player = new Player(getWidth()/2 - getWidth()/14, getHeight() - 58, 1, getWidth()/7, 29, this);
         display.getJframe().addKeyListener(keyManager);
-        /*display.getJframe().addMouseListener(mouseManager);
-        display.getJframe().addMouseMotionListener(mouseManager);
-        display.getCanvas().addMouseListener(mouseManager);
-        display.getCanvas().addMouseMotionListener(mouseManager);
-        */
+        for(int i = 0; i < 5; i++){
+            for(int j = 0; j < 15; j++){
+                methbricks.add(new Meth(29 + 64 * i, 29 + 64 * i, 64, 64, this));
+            }
+        }
     }
 
     @Override
@@ -136,6 +136,9 @@ public class Game implements Runnable {
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height, null);
             player.render(g);
+            for(int i = 0; i < 5; i++){
+                methbricks.get(i).render(g);
+            }
             //g.drawImage(Assets.player, x, height - 100, 100, 100, null);
             /* g.clearRect(0, 0, width, height);
             g.setColor(Color.red);

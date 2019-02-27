@@ -16,7 +16,7 @@ public class Methbreaker {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Game g = new Game("Juego", 800, 650);
+        Game g = new Game("Juego", 1280, 720);
         g.start();
     }
     

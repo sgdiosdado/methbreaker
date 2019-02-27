@@ -14,11 +14,9 @@ import java.awt.image.BufferedImage;
 public class Assets {
 
     public static BufferedImage background; // to store background image
-    public static BufferedImage playerUp[]; // pictures to go up
-    public static BufferedImage playerLeft[]; // pictures to go left
-    public static BufferedImage playerDown[]; // pictures to go down
-    public static BufferedImage playerRight[]; // pictures to go right
+    public static BufferedImage player[]; // pictures to go right
     public static BufferedImage sprites; // to store the sprites
+    public static BufferedImage methbrick;
 
 
     /**
@@ -26,19 +24,14 @@ public class Assets {
      */
     public static void init() {
         background = ImageLoader.loadImage("/images/desert_background.png");
-        sprites = ImageLoader.loadImage("/images/sprite-sheet-tarea1.png");
-        // creating array of images before animations
+        sprites = ImageLoader.loadImage("/images/hank_bar.png");
+        methbrick = ImageLoader.loadImage("/images/methbrick.png");
+        // Creating array of images before animations
         SpriteSheet spritesheet = new SpriteSheet(sprites);
-        playerUp = new BufferedImage[9];
-        playerLeft = new BufferedImage[9];
-        playerDown = new BufferedImage[9];
-        playerRight = new BufferedImage[9];
+        player = new BufferedImage[2];
         // cropping the pictures from the seet into the array
-        for (int i = 0; i < 9; i++) {
-            playerUp[i] = spritesheet.crop(i * 64, 512, 64, 64);
-            playerLeft[i] = spritesheet.crop(i * 64, 576, 64, 64);
-            playerDown[i] = spritesheet.crop(i * 64, 640, 64, 64);
-            playerRight[i] = spritesheet.crop(i * 64, 704, 64, 64);
+        for (int i = 0; i < 2; i++) {
+            player[i] = spritesheet.crop(i * 64, 0, 64, 18);
         }
     }
 

@@ -20,8 +20,8 @@ public class Player extends Item {
     public Player(int x, int y, int direction, int width, int height, Game game) {
         super(x, y, width, height);
         this.game = game;
-        this.speed = 1;
-        currentAnimation = new Animation(Assets.playerRight, 100);
+        this.speed = 8;
+        currentAnimation = new Animation(Assets.player, 200);
     }
 
     public int getX() {
@@ -44,6 +44,10 @@ public class Player extends Item {
         return speed;
     }
 
+    public Game getGame(){
+        return game;
+    }
+    
     public void setX(int x) {
         this.x = x;
     }
@@ -69,18 +73,18 @@ public class Player extends Item {
 
         currentAnimation.tick();
         // moving player depending on flags
-        if (game.getKeyManager().left) {
-            setX(getX() - 3);
+        if (getGame().getKeyManager().left) {
+            setX(getX() - getSpeed());
         }
-        if (game.getKeyManager().right) {
-            setX(getX() + 3);
+        if (getGame().getKeyManager().right) {
+            setX(getX() + getSpeed());
         }
 
         // reset x position and y position if colision
-        if (getX() + 80 > game.getWidth()) { // right side
-            setX(game.getWidth() - 80);
-        } else if (getX() < -20) { // left side
-            setX(-20);
+        if (getX() + getWidth() > getGame().getWidth()) { // right side
+            setX(getGame().getWidth() - getWidth());
+        } else if (getX() < 0) { // left side
+            setX(0);
         }
     }
 

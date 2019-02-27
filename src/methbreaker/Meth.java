@@ -27,7 +27,7 @@ public class Meth extends Item {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.playerDown[0], getX(), getY(), getWidth(), getHeight(), null);
+        g.drawImage(Assets.methbrick, getX(), getY(), getWidth(), getHeight(), null);
     }
     
 }
