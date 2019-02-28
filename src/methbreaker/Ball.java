@@ -16,13 +16,17 @@ import javafx.scene.shape.Circle;
 public class Ball extends Item {
     
     private Game game;
-    private boolean movable;
+    private boolean movable; //sets true when first move is done by player
     private int speed;
     
     Ball(int x, int y, int width, int height, Game game)  {
         super(x, y, width, height);
         this.game = game;
-        this.speed = 3;
+        this.speed = 4;
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     /**
@@ -61,29 +65,37 @@ public class Ball extends Item {
      * Creates a Circle object and simulates the "Hitbox" of the ball
      * @return new Circle
      */
-    public Circle getHitbox() {
-        return new Circle(getX() + (getWidth() / 2), getY() + getHeight() / 2, getWidth() / 2);
+    public Rectangle getHitbox() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
-    /*
-    public boolean intersecta(Meth meth) {
-        Circle c0 = getHitbox();
-        Rectangle r1= meth.getPerimetro();
-        
-        double x0 = c0.getCenterX();
-        double x1 = r1.getCenterX();
-        double y0 = c0.getCenterY();
-        double y1 = r1.getCenterY();
-      
-        
-        return Math.hypot(x0-x1, y0-y1) <= (r0 + r1);
-    }
-    */
+    public boolean intersecta(Object obj) {   
+        return (obj instanceof Meth && getHitbox().intersects(((Meth) (obj)).getPerimetro()) 
+                || obj instanceof Player && getHitbox().intersects(((Player) (obj)).getPerimetro()));
+    }        
+
     @Override
     public void tick() {
         if (isMovable()) {
             setY(getY() - getSpeed());
         }
+        // reset x position and y position if colision
+        if (getX() + getWidth() > getGame().getWidth()) { // right side
+            setX(getGame().getWidth() - getWidth());
+            setSpeed(getSpeed() * -1);
+        } else if (getX() < 0) { // left side
+            setX(0);
+            setSpeed(getSpeed() * -1);
+        }
+        
+        if (getY() >= game.getHeight()) {
+            setY(game.getHeight() - getHeight());
+            setSpeed(getSpeed() * -1);
+        }
+        else if (getY() <= 0) {
+            setY(0);
+            setSpeed(getSpeed() * -1);
+        }    
     }
 
     @Override

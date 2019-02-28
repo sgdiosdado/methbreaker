@@ -6,6 +6,7 @@
 package methbreaker;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  *
@@ -90,6 +91,10 @@ public class Player extends Item {
         }
     }
 
+     public Rectangle getPerimetro() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+     
     @Override
     public void render(Graphics g) {
         g.drawImage(currentAnimation.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);

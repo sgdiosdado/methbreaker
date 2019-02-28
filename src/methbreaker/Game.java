@@ -131,6 +131,20 @@ public class Game implements Runnable {
         //avancing a player with colision
         player.tick();
         ball.tick();
+        
+        for (int i = 0; i < methbricks.size(); i++) {
+            Meth meth = methbricks.get(i);
+            // checking collision between player and bad
+            if (ball.intersecta(meth)) {
+                ball.setSpeed(ball.getSpeed() * -1);
+                methbricks.remove(i);
+            }
+            if (ball.intersecta(player)) {
+                ball.setY(player.getY() - ball.getHeight());
+                ball.setSpeed(ball.getSpeed() * -1);
+            }
+       }
+
     }
 
     private void render() {
@@ -152,11 +166,6 @@ public class Game implements Runnable {
                 methbricks.get(i).render(g);
             }
             ball.render(g);
-            //g.drawImage(Assets.player, x, height - 100, 100, 100, null);
-            /* g.clearRect(0, 0, width, height);
-            g.setColor(Color.red);
-            g.drawRect(10, 10, 40, 40);
-             */
             bs.show();
             g.dispose();
         }
