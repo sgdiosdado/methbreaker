@@ -21,7 +21,7 @@ public class Player extends Item {
         super(x, y, width, height);
         this.game = game;
         this.speed = 8;
-        currentAnimation = new Animation(Assets.player, 200);
+        currentAnimation = new Animation(Assets.player, 60);
     }
 
     public int getX() {
