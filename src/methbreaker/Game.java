@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,18 +19,19 @@ import java.util.LinkedList;
 public class Game implements Runnable {
 
     private final int PADDING;              // constant for the padding of the videogame
-    private BufferStrategy bs;              //to have several buffers when displaying
-    private Graphics g;                     //to paint objects
-    private Display display;                //to display in the game 
-    private String title;                   //title of the window
-    private int width;                      //width of the window
-    private int height;                     //height of the window
-    private Thread thread;                  //thread to create the game
-    private boolean running;                //to set the game
+    private BufferStrategy bs;              // to have several buffers when displaying
+    private Graphics g;                     // to paint objects
+    private Display display;                // to display in the game 
+    private String title;                   // title of the window
+    private int width;                      // width of the window
+    private int height;                     // height of the window
+    private Thread thread;                  // thread to create the game
+    private boolean running;                // to set the game
+    private boolean isPaused;               // to set the pause
     private Player player;                  // to use a player
     private KeyManager keyManager;          // to manage the keyboard
     private LinkedList<Meth> methbricks;    // to store a set of meth bricks
-    private Ball ball;
+    private Ball ball;                      // to store the ball
 
     /**
      * to	create	title,	width	and	height	and	set	the	game	is	still	not	running
@@ -45,6 +48,7 @@ public class Game implements Runnable {
         keyManager = new KeyManager();
         methbricks = new LinkedList<Meth>();
         this.PADDING = 30;
+        this.isPaused = false;
     }
 
     /**
@@ -128,8 +132,19 @@ public class Game implements Runnable {
 
     private void tick() {
         keyManager.tick();
-        //avancing a player with colision
-        player.tick();
+        // To check the pause flag and modify it when need it.
+        if(getKeyManager().p){
+            isPaused = !isPaused;
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        if(!isPaused){
+           player.tick();  
+        }
     }
 
     private void render() {
