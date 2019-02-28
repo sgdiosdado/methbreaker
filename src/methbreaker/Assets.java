@@ -30,9 +30,9 @@ public class Assets {
         ball = ImageLoader.loadImage("/images/pizza.png");
         // Creating array of images before animations
         SpriteSheet spritesheet = new SpriteSheet(sprites);
-        player = new BufferedImage[2];
+        player = new BufferedImage[4];
         // cropping the pictures from the seet into the array
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < player.length; i++) {
             player[i] = spritesheet.crop(i * 64, 0, 64, 18);
         }
     }
