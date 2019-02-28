@@ -130,6 +130,7 @@ public class Game implements Runnable {
         keyManager.tick();
         //avancing a player with colision
         player.tick();
+        ball.tick();
     }
 
     private void render() {
@@ -147,10 +148,10 @@ public class Game implements Runnable {
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height, null);
             player.render(g);
-            ball.render(g);
             for (int i = 0; i < methbricks.size(); i++) {
                 methbricks.get(i).render(g);
             }
+            ball.render(g);
             //g.drawImage(Assets.player, x, height - 100, 100, 100, null);
             /* g.clearRect(0, 0, width, height);
             g.setColor(Color.red);
