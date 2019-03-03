@@ -155,10 +155,10 @@ public class Game implements Runnable {
                     ball.bounce(Ball.Side.LEFT);
                 }else if(ball.getX() < meth.getX()){
                     ball.bounce(Ball.Side.RIGHT);
-                }else if(ball.getY() < meth.getY()){
-                    ball.bounce(Ball.Side.TOP);
                 }
-                else{
+                if(ball.getY() > meth.getY()){
+                    ball.bounce(Ball.Side.TOP);
+                } else if (ball.getY() < meth.getY()){
                     ball.bounce(Ball.Side.BOTTOM);
                 }
                 methbricks.remove(i);
