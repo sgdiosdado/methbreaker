@@ -6,6 +6,7 @@
 package methbreaker;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  *
@@ -20,7 +21,11 @@ public class Meth extends Item {
         super(x, y, width, height);
         this.game = game;
     }
-
+    
+    public Rectangle getPerimetro() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+    
     @Override
     public void tick() {
     }

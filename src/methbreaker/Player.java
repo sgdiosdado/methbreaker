@@ -6,6 +6,7 @@
 package methbreaker;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  *
@@ -75,9 +76,11 @@ public class Player extends Item {
         // moving player depending on flags
         if (getGame().getKeyManager().left) {
             setX(getX() - getSpeed());
+            game.getBall().setMovable(true);
         }
         if (getGame().getKeyManager().right) {
             setX(getX() + getSpeed());
+            game.getBall().setMovable(true);
         }
 
         // reset x position and y position if colision
@@ -88,6 +91,10 @@ public class Player extends Item {
         }
     }
 
+     public Rectangle getPerimetro() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+     
     @Override
     public void render(Graphics g) {
         g.drawImage(currentAnimation.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
