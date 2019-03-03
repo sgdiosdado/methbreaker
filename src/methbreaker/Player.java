@@ -17,12 +17,14 @@ public class Player extends Item {
     private Game game;
     private int speed;
     private Animation currentAnimation;
+    private boolean canMove;
 
     public Player(int x, int y, int direction, int width, int height, Game game) {
         super(x, y, width, height);
         this.game = game;
         this.speed = 8;
         currentAnimation = new Animation(Assets.player, 60);
+        this.canMove = true;
     }
 
     public int getX() {
@@ -48,6 +50,14 @@ public class Player extends Item {
     public Game getGame(){
         return game;
     }
+
+    public boolean canMove() {
+        return canMove;
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
+    }
     
     public void setX(int x) {
         this.x = x;
@@ -71,23 +81,25 @@ public class Player extends Item {
 
     @Override
     public void tick() {
+        
+        if (canMove()) {
+            currentAnimation.tick();
+            // moving player depending on flags
+            if (getGame().getKeyManager().left) {
+                setX(getX() - getSpeed());
+                game.getBall().setMovable(true);
+            }
+            if (getGame().getKeyManager().right) {
+                setX(getX() + getSpeed());
+                game.getBall().setMovable(true);
+            }
 
-        currentAnimation.tick();
-        // moving player depending on flags
-        if (getGame().getKeyManager().left) {
-            setX(getX() - getSpeed());
-            game.getBall().setMovable(true);
-        }
-        if (getGame().getKeyManager().right) {
-            setX(getX() + getSpeed());
-            game.getBall().setMovable(true);
-        }
-
-        // reset x position and y position if colision
-        if (getX() + getWidth() > getGame().getWidth()) { // right side
-            setX(getGame().getWidth() - getWidth());
-        } else if (getX() < 0) { // left side
-            setX(0);
+            // reset x position and y position if colision
+            if (getX() + getWidth() > getGame().getWidth()) { // right side
+                setX(getGame().getWidth() - getWidth());
+            } else if (getX() < 0) { // left side
+                setX(0);
+            }
         }
     }
 

@@ -19,6 +19,7 @@ public class KeyManager implements KeyListener {
     public boolean left;    // flag to move left the player
     public boolean right;   // flag to move right the player
     public boolean p;       // flag to pause the game
+    public boolean movement;//flag to denote the player has pressed/released a key
     
     private boolean keys[]; // to store all the flags for every key
 
@@ -34,12 +35,14 @@ public class KeyManager implements KeyListener {
     public void keyPressed(KeyEvent e) {
         // set true to every key pressed
         keys[e.getKeyCode()] = true;
+        movement = true;
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         // set false to every key released
         keys[e.getKeyCode()] = false;
+        movement = false;
     }
     
     /**

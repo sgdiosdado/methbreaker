@@ -60,6 +60,18 @@ public class Ball extends Item {
     public void setSpeed(int speed) {
         this.speed = speed;
     }
+    
+    /**
+     * Puts the ball and the bar in the default position
+     */
+    public void reset() {
+        game.getPlayer().setX(game.getWidth() / 2 - game.getWidth() / 14);
+        game.getPlayer().setY(game.getHeight() - (game.PADDING * 2));
+        setX(((game.getPlayer().getX() + (game.getPlayer().getWidth())/2) - 16));
+        setY(game.getPlayer().getY() - 32);
+        setMovable(false);
+        game.getPlayer().setCanMove(false);
+    }
 
     /**
      * Creates a Circle object and simulates the "Hitbox" of the ball
@@ -88,11 +100,13 @@ public class Ball extends Item {
             setSpeed(getSpeed() * -1);
         }
         
-        if (getY() >= game.getHeight()) {
+        if (getY() >= game.getHeight() - getHeight()) { //down
             setY(game.getHeight() - getHeight());
             setSpeed(getSpeed() * -1);
+            reset();
+            game.setLives(game.getLives() - 1);
         }
-        else if (getY() <= 0) {
+        else if (getY() <= 0) { // up
             setY(0);
             setSpeed(getSpeed() * -1);
         }    

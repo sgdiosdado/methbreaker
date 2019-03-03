@@ -6,6 +6,7 @@
 package methbreaker;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.LinkedList;
@@ -18,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class Game implements Runnable {
 
-    private final int PADDING;              // constant for the padding of the videogame
+    public final int PADDING;              // constant for the padding of the videogame
     private BufferStrategy bs;              // to have several buffers when displaying
     private Graphics g;                     // to paint objects
     private Display display;                // to display in the game 
@@ -32,6 +33,9 @@ public class Game implements Runnable {
     private KeyManager keyManager;          // to manage the keyboard
     private LinkedList<Meth> methbricks;    // to store a set of meth bricks
     private Ball ball;                      // to store the ball
+    private int lives;                      // to store the amount of lives in the game
+    private int score;                      // to store the game score
+    private boolean gameEnded;              // to store if the game is over
 
     /**
      * to	create	title,	width	and	height	and	set	the	game	is	still	not	running
@@ -49,6 +53,7 @@ public class Game implements Runnable {
         methbricks = new LinkedList<Meth>();
         this.PADDING = 30;
         this.isPaused = false;
+        this.lives = 3;
     }
 
     /**
@@ -75,6 +80,30 @@ public class Game implements Runnable {
 
     public Ball getBall() {
         return ball;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     /* 
@@ -147,18 +176,28 @@ public class Game implements Runnable {
            ball.tick();
         }
         
+        if (!getKeyManager().movement) {
+            getPlayer().setCanMove(true);
+        }
+        
         for (int i = 0; i < methbricks.size(); i++) {
             Meth meth = methbricks.get(i);
             // checking collision between player and bad
             if (ball.intersecta(meth)) {
                 ball.setSpeed(ball.getSpeed() * -1);
                 methbricks.remove(i);
+                setScore(getScore() + 10);
             }
             if (ball.intersecta(player)) {
                 ball.setY(player.getY() - ball.getHeight());
                 ball.setSpeed(ball.getSpeed() * -1);
             }
-       }
+        }
+        
+        
+        if (getLives() == 0) {
+            gameEnded = true;
+        }
 
     }
 
@@ -175,12 +214,26 @@ public class Game implements Runnable {
             display.getCanvas().createBufferStrategy(3);
         } else {
             g = bs.getDrawGraphics();
-            g.drawImage(Assets.background, 0, 0, width, height, null);
-            player.render(g);
-            for (int i = 0; i < methbricks.size(); i++) {
-                methbricks.get(i).render(g);
+            if (!gameEnded){
+                g.drawImage(Assets.background, 0, 0, width, height, null);
+                g.setFont(new Font("Dialog", Font.PLAIN, 24));
+                g.setColor(Color.WHITE);
+                g.drawString("Score: " + getScore(), PADDING, 24);
+                player.render(g);
+                for (int i = 0; i < methbricks.size(); i++) {
+                    methbricks.get(i).render(g);
+                }
+                ball.render(g);
+                for (int i = 0; i < lives; i++){
+                    g.drawImage(Assets.lives,getWidth() - 24 - (i*24) - PADDING - 5 , 4, 24, 24, null); // EL -5 es estetico
+                }
             }
-            ball.render(g);
+            else {
+                //g.drawImage(Assets.gameOverScreen, 0, 0, width, height, null);
+                player.setCanMove(false);
+                bs.show();
+                g.dispose();
+            }
             bs.show();
             g.dispose();
         }
