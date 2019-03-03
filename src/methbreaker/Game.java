@@ -170,7 +170,7 @@ public class Game implements Runnable {
                 Thread.currentThread().interrupt();
             }
         }
-
+        // When the game is pause, the ticks are not executed.
         if(!isPaused){
            player.tick();  
            ball.tick();
@@ -184,13 +184,22 @@ public class Game implements Runnable {
             Meth meth = methbricks.get(i);
             // checking collision between player and bad
             if (ball.intersecta(meth)) {
-                ball.setSpeed(ball.getSpeed() * -1);
+                if(ball.getX() > meth.getX()){
+                    ball.bounce(Ball.Side.LEFT);
+                }else if(ball.getX() < meth.getX()){
+                    ball.bounce(Ball.Side.RIGHT);
+                }
+                if(ball.getY() > meth.getY()){
+                    ball.bounce(Ball.Side.TOP);
+                } else if (ball.getY() < meth.getY()){
+                    ball.bounce(Ball.Side.BOTTOM);
+                }
                 methbricks.remove(i);
                 setScore(getScore() + 10);
             }
             if (ball.intersecta(player)) {
                 ball.setY(player.getY() - ball.getHeight());
-                ball.setSpeed(ball.getSpeed() * -1);
+                ball.bounce(Ball.Side.BOTTOM);
             }
         }
         
