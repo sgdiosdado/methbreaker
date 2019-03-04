@@ -14,19 +14,29 @@ import java.awt.event.KeyListener;
  */
 public class KeyManager implements KeyListener {
     
-    public boolean up;      // flag to move up the player
-    public boolean down;    // flag to move down the player
-    public boolean left;    // flag to move left the player
-    public boolean right;   // flag to move right the player
-    public boolean p;       // flag to pause the game
-    public boolean movement;//flag to denote the player has pressed/released a key
+    public boolean up;          // flag to move up the player
+    public boolean down;        // flag to move down the player
+    public boolean left;        // flag to move left the player
+    public boolean right;       // flag to move right the player
+    public boolean p;           // flag to pause the game
+    public boolean movement;    // flag to denote the player has pressed/released a key
+    private boolean pressable;  // flag to do a one time press that has lasting effect
     
     private boolean keys[]; // to store all the flags for every key
 
     public KeyManager() {
         keys = new boolean[256];
+        this.pressable = true;
     }
 
+    public boolean isPressable() {
+        return pressable;
+    }
+
+    public void setPressable(boolean pressable) {
+        this.pressable = pressable;
+    }
+    
     @Override
     public void keyTyped(KeyEvent e) {
     }
@@ -43,6 +53,9 @@ public class KeyManager implements KeyListener {
         // set false to every key released
         keys[e.getKeyCode()] = false;
         movement = false;
+        if (e.getKeyCode() == KeyEvent.VK_P){
+            setPressable(true);
+        }
     }
     
     /**

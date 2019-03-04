@@ -41,6 +41,7 @@ public class Game implements Runnable {
     private LinkedList<PowerUp> powerUps;   // to store the Power-Up object
     private HashMap<String, Boolean> states;// to store the states of all power-ups in game
     private int statesCounter;              // to count how much time has passed since state
+
     /**
      * to	create	title,	width	and	height	and	set	the	game	is	still	not	running
      *
@@ -192,87 +193,81 @@ public class Game implements Runnable {
     }
 
     private void tick() {
-        if (states.get(state2xSpeedPlayer)) {
-            statesCounter++;
-        }
-        if (statesCounter == 900) {
-            states.put(state2xSpeedPlayer, false);
-            statesCounter = 0;
-            player.setSpeed(player.getSpeed() / 2);
-        }
+
         keyManager.tick();
         // To check the pause flag and modify it when need it.
-        if (getKeyManager().p) {
+        if (getKeyManager().p && getKeyManager().isPressable()) {
             isPaused = !isPaused;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
+            getKeyManager().setPressable(false);
         }
-
         // When the game is pause, the ticks are not executed.
-        if(!isPaused){
-           player.tick();  
-           ball.tick();
-        }
-
-        if (!getKeyManager().movement) {
-            getPlayer().setCanMove(true);
-        }
-
-        for (int i = 0; i < methbricks.size(); i++) {
-            Meth meth = methbricks.get(i);
-            // checking collision between player and bad
-            if (ball.intersecta(meth)) {
-                Assets.brickBreaking.play();
-                if (Math.random() < 0.1) {
-                    powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 8 , meth.getY() + meth.getHeight() + 16, 16, 16));
-                }
-                ball.setSpeed(ball.getSpeed() * -1);
-                if(ball.getX() > meth.getX()){
-                    ball.bounce(Ball.Side.LEFT);
-                }else if(ball.getX() < meth.getX()){
-                    ball.bounce(Ball.Side.RIGHT);
-                }
-                if(ball.getY() > meth.getY()){
-                    ball.bounce(Ball.Side.TOP);
-                } else if (ball.getY() < meth.getY()){
-                    ball.bounce(Ball.Side.BOTTOM);
-                }
-                methbricks.remove(i);
-                setScore(getScore() + 10);  
+        if (!isPaused) {
+            player.tick();
+            ball.tick();
+            if (states.get(state2xSpeedPlayer)) {
+                statesCounter++;
             }
-            if (ball.intersecta(player)) {
-                ball.setY(player.getY() - ball.getHeight());
-                ball.bounce(Ball.Side.BOTTOM);
-                Assets.playerHit.play();
-            }
-        }
-
-        for (int i = 0; i < powerUps.size(); i++) {
-            PowerUp powerUp = powerUps.get(i);
-            powerUp.tick();
-            if (powerUp.getY() >= getHeight() - powerUp.getHeight()) {
-                powerUps.remove(powerUp);
-            }
-            
-            if (powerUp.intersecta(player)) {
-                Assets.powerUpSound.play();
-                System.out.println(states.get(state2xSpeedPlayer));
-                if (!states.get(state2xSpeedPlayer)){
-                    player.setSpeed(player.getSpeed() * 2);
-                    states.put(state2xSpeedPlayer, true);
-                }
-                powerUps.remove(powerUp);
+            if (statesCounter == 900) {
+                states.put(state2xSpeedPlayer, false);
                 statesCounter = 0;
+                player.setSpeed(player.getSpeed() / 2);
+            }
+
+            if (!getKeyManager().movement) {
+                getPlayer().setCanMove(true);
+            }
+
+            for (int i = 0; i < methbricks.size(); i++) {
+                Meth meth = methbricks.get(i);
+                // checking collision between player and bad
+                if (ball.intersecta(meth)) {
+                    Assets.brickBreaking.play();
+                    if (Math.random() < 0.1) {
+                        powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 8, meth.getY() + meth.getHeight() + 16, 16, 16));
+                    }
+                    ball.setSpeed(ball.getSpeed() * -1);
+                    if (ball.getX() > meth.getX()) {
+                        ball.bounce(Ball.Side.LEFT);
+                    } else if (ball.getX() < meth.getX()) {
+                        ball.bounce(Ball.Side.RIGHT);
+                    }
+                    if (ball.getY() > meth.getY()) {
+                        ball.bounce(Ball.Side.TOP);
+                    } else if (ball.getY() < meth.getY()) {
+                        ball.bounce(Ball.Side.BOTTOM);
+                    }
+                    methbricks.remove(i);
+                    setScore(getScore() + 10);
+                }
+                if (ball.intersecta(player)) {
+                    ball.setY(player.getY() - ball.getHeight());
+                    ball.bounce(Ball.Side.BOTTOM);
+                    Assets.playerHit.play();
+                }
+            }
+
+            for (int i = 0; i < powerUps.size(); i++) {
+                PowerUp powerUp = powerUps.get(i);
+                powerUp.tick();
+                if (powerUp.getY() >= getHeight() - powerUp.getHeight()) {
+                    powerUps.remove(powerUp);
+                }
+
+                if (powerUp.intersecta(player)) {
+                    Assets.powerUpSound.play();
+                    if (!states.get(state2xSpeedPlayer)) {
+                        player.setSpeed(player.getSpeed() * 2);
+                        states.put(state2xSpeedPlayer, true);
+                    }
+                    powerUps.remove(powerUp);
+                    statesCounter = 0;
+                }
+            }
+
+            if (getLives() == 0) {
+                gameEnded = true;
             }
         }
-
-        if (getLives() == 0) {
-            gameEnded = true;
-        }
-
     }
 
     private void render() {
