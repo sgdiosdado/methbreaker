@@ -152,7 +152,7 @@ public class Game implements Runnable {
         player = new Player(getWidth() / 2 - getWidth() / 14, getHeight() - (PADDING * 2), 1, getWidth() / 7, PADDING, this);
         ball = new Ball((player.getX() + (player.getWidth()) / 2) - 16, player.getY() - 32, 32, 32, this);
         display.getJframe().addKeyListener(keyManager);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 19; j++) {
                 methbricks.add(new Meth(PADDING + 64 * j, PADDING*2 + i * 64, 64, 64, this));
             }
