@@ -154,7 +154,7 @@ public class Game implements Runnable {
         display.getJframe().addKeyListener(keyManager);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 19; j++) {
-                methbricks.add(new Meth(PADDING + 64 * j, PADDING + i * 64, 64, 64, this));
+                methbricks.add(new Meth(PADDING + 64 * j, PADDING*2 + i * 64, 64, 64, this));
             }
         }
         states.put(state2xSpeedPlayer, false);
@@ -285,16 +285,16 @@ public class Game implements Runnable {
             g = bs.getDrawGraphics();
             if (!gameEnded) {
                 g.drawImage(Assets.background, 0, 0, width, height, null);
-                g.setFont(new Font("Dialog", Font.PLAIN, 24));
+                g.setFont(new Font("Dialog", Font.BOLD, 24));
                 g.setColor(Color.WHITE);
-                g.drawString("Score: " + getScore(), PADDING, 24);
+                g.drawString("Score: " + getScore(), PADDING, 24 + PADDING/2);
                 player.render(g);
                 for (int i = 0; i < methbricks.size(); i++) {
                     methbricks.get(i).render(g);
                 }
                 ball.render(g);
                 for (int i = 0; i < lives; i++) {
-                    g.drawImage(Assets.lives, getWidth() - 24 - (i * 24) - PADDING - 5, 4, 24, 24, null); // EL -5 es estetico
+                    g.drawImage(Assets.lives, getWidth() - 40 - (i * 40) - PADDING - 5, 8, 40, 48, null); // EL -5 es estetico
                 }
                 for (int i = 0; i < powerUps.size(); i++) {
                     powerUps.get(i).render(g);

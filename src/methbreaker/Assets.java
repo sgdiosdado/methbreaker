@@ -41,7 +41,7 @@ public class Assets {
         playerSprites = ImageLoader.loadImage("/images/hank_bar.png");
         methbrick = ImageLoader.loadImage("/images/methbrick.png");
         ballSprites = ImageLoader.loadImage("/images/pizza.png");
-        lives = ImageLoader.loadImage("/images/heart.png");
+        lives = ImageLoader.loadImage("/images/life.png");
         powerUp = ImageLoader.loadImage("/images/redBall.png");
         
         // Creating array of images before animations
