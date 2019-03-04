@@ -21,6 +21,7 @@ public class Ball extends Item {
     private int speed;          // To store the speed of the ball
     private int xSpeed;         // To store x-axis speed
     private int ySpeed;         // To store y-axis speed
+    private Animation currentAnimation;
 
     public enum Side {
         TOP, RIGHT, BOTTOM, LEFT
@@ -32,6 +33,7 @@ public class Ball extends Item {
         this.speed = 4;
         this.xSpeed = -speed;
         this.ySpeed = -speed;
+        currentAnimation = new Animation(Assets.ball, 60);
     }
 
     /**
@@ -172,6 +174,7 @@ public class Ball extends Item {
 
     @Override
     public void tick() {
+        currentAnimation.tick();
         if (isMovable()) {
             setY(getY() + getySpeed());
             setX(getX() + getxSpeed());
@@ -200,7 +203,7 @@ public class Ball extends Item {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.ball, getX(), getY(), getWidth(), getHeight(), null);
+        g.drawImage(currentAnimation.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
     }
 
 }

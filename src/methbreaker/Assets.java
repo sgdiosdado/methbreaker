@@ -15,9 +15,10 @@ public class Assets {
 
     public static BufferedImage background; // to store background image
     public static BufferedImage player[];   // pictures to go right
-    public static BufferedImage sprites;    // to store the sprites
+    public static BufferedImage playerSprites;    // to store the sprites
     public static BufferedImage methbrick;  // to store the meth image
-    public static BufferedImage ball;       // to store the ball (pizza) image
+    public static BufferedImage ball[];       // to store the ball (pizza) image
+    public static BufferedImage ballSprites;
     public static BufferedImage lives;      // to store the lives (heart) image
     public static BufferedImage powerUp;    // to store the powerUp image
 
@@ -26,17 +27,22 @@ public class Assets {
      */
     public static void init() {
         background = ImageLoader.loadImage("/images/desert_background.png");
-        sprites = ImageLoader.loadImage("/images/hank_bar.png");
+        playerSprites = ImageLoader.loadImage("/images/hank_bar.png");
         methbrick = ImageLoader.loadImage("/images/methbrick.png");
-        ball = ImageLoader.loadImage("/images/pizza.png");
+        ballSprites = ImageLoader.loadImage("/images/pizza_animated.png");
         lives = ImageLoader.loadImage("/images/heart.png");
         powerUp = ImageLoader.loadImage("/images/redBall.png");
         // Creating array of images before animations
-        SpriteSheet spritesheet = new SpriteSheet(sprites);
+        SpriteSheet playerSpritesheet = new SpriteSheet(playerSprites);
         player = new BufferedImage[4];
         // cropping the pictures from the seet into the array
         for (int i = 0; i < player.length; i++) {
-            player[i] = spritesheet.crop(i * 64, 0, 64, 18);
+            player[i] = playerSpritesheet.crop(i * 64, 0, 64, 18);
+        }
+        ball = new BufferedImage[4];
+        SpriteSheet ballSpritesheet = new SpriteSheet(ballSprites);
+        for(int i = 0; i < ball.length; i++){
+            ball[i] = ballSpritesheet.crop(i * 64, 0, 64, 64);
         }
     }
 
