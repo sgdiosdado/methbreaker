@@ -211,9 +211,10 @@ public class Game implements Runnable {
             }
         }
 
-        if (!isPaused) {
-            player.tick();
-            ball.tick();
+        // When the game is pause, the ticks are not executed.
+        if(!isPaused){
+           player.tick();  
+           ball.tick();
         }
 
         if (!getKeyManager().movement) {
@@ -224,16 +225,26 @@ public class Game implements Runnable {
             Meth meth = methbricks.get(i);
             // checking collision between player and bad
             if (ball.intersecta(meth)) {
-                if (Math.random() < 0.9) {
+                if (Math.random() < 0.1) {
                     powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 8 , meth.getY() + meth.getHeight() + 16, 16, 16));
                 }
                 ball.setSpeed(ball.getSpeed() * -1);
+                if(ball.getX() > meth.getX()){
+                    ball.bounce(Ball.Side.LEFT);
+                }else if(ball.getX() < meth.getX()){
+                    ball.bounce(Ball.Side.RIGHT);
+                }
+                if(ball.getY() > meth.getY()){
+                    ball.bounce(Ball.Side.TOP);
+                } else if (ball.getY() < meth.getY()){
+                    ball.bounce(Ball.Side.BOTTOM);
+                }
                 methbricks.remove(i);
                 setScore(getScore() + 10);  
             }
             if (ball.intersecta(player)) {
                 ball.setY(player.getY() - ball.getHeight());
-                ball.setSpeed(ball.getSpeed() * -1);
+                ball.bounce(Ball.Side.BOTTOM);
             }
         }
 

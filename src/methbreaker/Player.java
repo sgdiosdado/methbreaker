@@ -81,25 +81,23 @@ public class Player extends Item {
 
     @Override
     public void tick() {
-        
-        if (canMove()) {
-            currentAnimation.tick();
-            // moving player depending on flags
-            if (getGame().getKeyManager().left) {
-                setX(getX() - getSpeed());
-                game.getBall().setMovable(true);
-            }
-            if (getGame().getKeyManager().right) {
-                setX(getX() + getSpeed());
-                game.getBall().setMovable(true);
-            }
+        currentAnimation.tick();
+        // moving player depending on flags
+        if(getGame().getKeyManager().left || getGame().getKeyManager().right){
+            getGame().getBall().setMovable(true);
+        }
+        if (getGame().getKeyManager().left) {
+            setX(getX() - getSpeed());
+        }
+        if (getGame().getKeyManager().right) {
+            setX(getX() + getSpeed());
+        }
 
-            // reset x position and y position if colision
-            if (getX() + getWidth() > getGame().getWidth()) { // right side
-                setX(getGame().getWidth() - getWidth());
-            } else if (getX() < 0) { // left side
-                setX(0);
-            }
+        // reset x position and y position if colision
+        if (getX() + getWidth() > getGame().getWidth()) { // right side
+            setX(getGame().getWidth() - getWidth());
+        } else if (getX() < 0) { // left side
+            setX(0);
         }
     }
 
