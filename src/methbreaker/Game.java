@@ -225,6 +225,7 @@ public class Game implements Runnable {
             Meth meth = methbricks.get(i);
             // checking collision between player and bad
             if (ball.intersecta(meth)) {
+                Assets.brickBreaking.play();
                 if (Math.random() < 0.1) {
                     powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 8 , meth.getY() + meth.getHeight() + 16, 16, 16));
                 }
@@ -245,6 +246,7 @@ public class Game implements Runnable {
             if (ball.intersecta(player)) {
                 ball.setY(player.getY() - ball.getHeight());
                 ball.bounce(Ball.Side.BOTTOM);
+                Assets.playerHit.play();
             }
         }
 
@@ -256,6 +258,7 @@ public class Game implements Runnable {
             }
             
             if (powerUp.intersecta(player)) {
+                Assets.powerUpSound.play();
                 System.out.println(states.get(state2xSpeedPlayer));
                 if (!states.get(state2xSpeedPlayer)){
                     player.setSpeed(player.getSpeed() * 2);

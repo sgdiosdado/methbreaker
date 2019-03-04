@@ -188,12 +188,13 @@ public class Ball extends Item {
             bounce(Side.LEFT);
         }
         
-        if (getY() >= game.getHeight() - getHeight()) { //down
-            setY(game.getHeight() - getHeight());
+        if (getY() >= getGame().getHeight() - getHeight()) { //down
+            Assets.lifeLost.play();
+            setY(getGame().getHeight() - getHeight());
             setSpeed(getSpeed() * -1);
             reset();
-            game.setLives(game.getLives() - 1);
-            game.getPowerUps().clear();
+            getGame().setLives(getGame().getLives() - 1);
+            getGame().getPowerUps().clear();
         }
         else if (getY() <= 0) { // up
             setY(0);
