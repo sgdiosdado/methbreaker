@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +20,8 @@ import java.util.logging.Logger;
  */
 public class Game implements Runnable {
 
-    public final int PADDING;              // constant for the padding of the videogame
+    public final int PADDING;               // constant for the padding of the videogame
+    public final String state2xSpeedPlayer; // constant for 2x speed player boost
     private BufferStrategy bs;              // to have several buffers when displaying
     private Graphics g;                     // to paint objects
     private Display display;                // to display in the game 
@@ -36,7 +38,9 @@ public class Game implements Runnable {
     private int lives;                      // to store the amount of lives in the game
     private int score;                      // to store the game score
     private boolean gameEnded;              // to store if the game is over
-
+    private LinkedList<PowerUp> powerUps;   // to store the Power-Up object
+    private HashMap<String, Boolean> states;// to store the states of all power-ups in game
+    private int statesCounter;              // to count how much time has passed since state
     /**
      * to	create	title,	width	and	height	and	set	the	game	is	still	not	running
      *
@@ -48,12 +52,15 @@ public class Game implements Runnable {
         this.title = title;
         this.width = width;
         this.height = height;
-        running = false;
-        keyManager = new KeyManager();
-        methbricks = new LinkedList<Meth>();
+        this.running = false;
+        this.keyManager = new KeyManager();
+        this.methbricks = new LinkedList<Meth>();
+        this.powerUps = new LinkedList<PowerUp>();
+        this.states = new HashMap<String, Boolean>();
         this.PADDING = 30;
         this.isPaused = false;
         this.lives = 3;
+        this.state2xSpeedPlayer = "2XPlayerSpeed";
     }
 
     /**
@@ -94,6 +101,30 @@ public class Game implements Runnable {
         return player;
     }
 
+    public LinkedList<PowerUp> getPowerUps() {
+        return powerUps;
+    }
+
+    public HashMap<String, Boolean> getStates() {
+        return states;
+    }
+
+    public void setStates(HashMap<String, Boolean> states) {
+        this.states = states;
+    }
+
+    public int getStatesCounter() {
+        return statesCounter;
+    }
+
+    public void setStatesCounter(int statesCounter) {
+        this.statesCounter = statesCounter;
+    }
+
+    public void setPowerUps(LinkedList<PowerUp> powerUps) {
+        this.powerUps = powerUps;
+    }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
@@ -118,13 +149,14 @@ public class Game implements Runnable {
         display = new Display(title, width, height);
         Assets.init();
         player = new Player(getWidth() / 2 - getWidth() / 14, getHeight() - (PADDING * 2), 1, getWidth() / 7, PADDING, this);
-        ball = new Ball((player.getX() + (player.getWidth())/2) - 16, player.getY() - 32, 32, 32, this);
+        ball = new Ball((player.getX() + (player.getWidth()) / 2) - 16, player.getY() - 32, 32, 32, this);
         display.getJframe().addKeyListener(keyManager);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 19; j++) {
                 methbricks.add(new Meth(PADDING + 64 * j, PADDING + i * 64, 64, 64, this));
             }
         }
+        states.put(state2xSpeedPlayer, false);
     }
 
     @Override
@@ -160,9 +192,17 @@ public class Game implements Runnable {
     }
 
     private void tick() {
+        if (states.get(state2xSpeedPlayer)) {
+            statesCounter++;
+        }
+        if (statesCounter == 900) {
+            states.put(state2xSpeedPlayer, false);
+            statesCounter = 0;
+            player.setSpeed(player.getSpeed() / 2);
+        }
         keyManager.tick();
         // To check the pause flag and modify it when need it.
-        if(getKeyManager().p){
+        if (getKeyManager().p) {
             isPaused = !isPaused;
             try {
                 Thread.sleep(100);
@@ -171,30 +211,50 @@ public class Game implements Runnable {
             }
         }
 
-        if(!isPaused){
-           player.tick();  
-           ball.tick();
+        if (!isPaused) {
+            player.tick();
+            ball.tick();
         }
-        
+
         if (!getKeyManager().movement) {
             getPlayer().setCanMove(true);
         }
-        
+
         for (int i = 0; i < methbricks.size(); i++) {
             Meth meth = methbricks.get(i);
             // checking collision between player and bad
             if (ball.intersecta(meth)) {
+                if (Math.random() < 0.9) {
+                    powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 8 , meth.getY() + meth.getHeight() + 16, 16, 16));
+                }
                 ball.setSpeed(ball.getSpeed() * -1);
                 methbricks.remove(i);
-                setScore(getScore() + 10);
+                setScore(getScore() + 10);  
             }
             if (ball.intersecta(player)) {
                 ball.setY(player.getY() - ball.getHeight());
                 ball.setSpeed(ball.getSpeed() * -1);
             }
         }
-        
-        
+
+        for (int i = 0; i < powerUps.size(); i++) {
+            PowerUp powerUp = powerUps.get(i);
+            powerUp.tick();
+            if (powerUp.getY() >= getHeight() - powerUp.getHeight()) {
+                powerUps.remove(powerUp);
+            }
+            
+            if (powerUp.intersecta(player)) {
+                System.out.println(states.get(state2xSpeedPlayer));
+                if (!states.get(state2xSpeedPlayer)){
+                    player.setSpeed(player.getSpeed() * 2);
+                    states.put(state2xSpeedPlayer, true);
+                }
+                powerUps.remove(powerUp);
+                statesCounter = 0;
+            }
+        }
+
         if (getLives() == 0) {
             gameEnded = true;
         }
@@ -214,7 +274,7 @@ public class Game implements Runnable {
             display.getCanvas().createBufferStrategy(3);
         } else {
             g = bs.getDrawGraphics();
-            if (!gameEnded){
+            if (!gameEnded) {
                 g.drawImage(Assets.background, 0, 0, width, height, null);
                 g.setFont(new Font("Dialog", Font.PLAIN, 24));
                 g.setColor(Color.WHITE);
@@ -224,11 +284,13 @@ public class Game implements Runnable {
                     methbricks.get(i).render(g);
                 }
                 ball.render(g);
-                for (int i = 0; i < lives; i++){
-                    g.drawImage(Assets.lives,getWidth() - 24 - (i*24) - PADDING - 5 , 4, 24, 24, null); // EL -5 es estetico
+                for (int i = 0; i < lives; i++) {
+                    g.drawImage(Assets.lives, getWidth() - 24 - (i * 24) - PADDING - 5, 4, 24, 24, null); // EL -5 es estetico
                 }
-            }
-            else {
+                for (int i = 0; i < powerUps.size(); i++) {
+                    powerUps.get(i).render(g);
+                }
+            } else {
                 //g.drawImage(Assets.gameOverScreen, 0, 0, width, height, null);
                 player.setCanMove(false);
                 bs.show();

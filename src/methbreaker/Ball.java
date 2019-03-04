@@ -7,6 +7,7 @@ package methbreaker;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.Map;
 import javafx.scene.shape.Circle;
 
 /**
@@ -71,6 +72,11 @@ public class Ball extends Item {
         setY(game.getPlayer().getY() - 32);
         setMovable(false);
         game.getPlayer().setCanMove(false);
+        game.getPlayer().setSpeed(8);
+        game.setStatesCounter(0);
+        for (Map.Entry<String, Boolean> entry : game.getStates().entrySet()) {
+            entry.setValue(false);
+        }
     }
 
     /**
@@ -105,6 +111,7 @@ public class Ball extends Item {
             setSpeed(getSpeed() * -1);
             reset();
             game.setLives(game.getLives() - 1);
+            game.getPowerUps().clear();
         }
         else if (getY() <= 0) { // up
             setY(0);
