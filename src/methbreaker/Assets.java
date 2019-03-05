@@ -21,6 +21,7 @@ public class Assets {
     public static BufferedImage ballSprites;    // to store the ball spritesheet
     public static BufferedImage lives;          // to store the lives (heart) image
     public static BufferedImage powerUp;        // to store the powerUp image
+    public static BufferedImage gameOverScreen; // to store the game over image
     public static SoundClip brickBreaking;      // to store the brick breaking sound
     public static SoundClip powerUpSound;       // to store the power-up sound
     public static SoundClip lifeLost;           // to store the life lost sound
@@ -43,6 +44,8 @@ public class Assets {
         ballSprites = ImageLoader.loadImage("/images/pizza.png");
         lives = ImageLoader.loadImage("/images/life.png");
         powerUp = ImageLoader.loadImage("/images/redBall.png");
+        gameOverScreen = ImageLoader.loadImage("/images/game_over.png");
+        
         
         // Creating array of images before animations
         SpriteSheet playerSpritesheet = new SpriteSheet(playerSprites);

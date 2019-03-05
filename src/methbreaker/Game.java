@@ -225,7 +225,6 @@ public class Game implements Runnable {
                     if (Math.random() < 0.1) {
                         powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 8, meth.getY() + meth.getHeight() + 16, 16, 16));
                     }
-                    ball.setSpeed(ball.getSpeed() * -1);
                     if (ball.getX() > meth.getX()) {
                         ball.bounce(Ball.Side.LEFT);
                     } else if (ball.getX() < meth.getX()) {
@@ -300,7 +299,9 @@ public class Game implements Runnable {
                     powerUps.get(i).render(g);
                 }
             } else {
-                //g.drawImage(Assets.gameOverScreen, 0, 0, width, height, null);
+                g.drawImage(Assets.gameOverScreen, 0, 0, width, height, null);
+                ball.setxSpeed(0);
+                ball.setySpeed(0);
                 player.setCanMove(false);
                 bs.show();
                 g.dispose();

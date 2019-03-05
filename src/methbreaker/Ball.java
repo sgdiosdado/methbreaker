@@ -18,7 +18,6 @@ public class Ball extends Item {
 
     private Game game;          // To store the context
     private boolean movable;    // Sets true when first move is done by player
-    private int speed;          // To store the speed of the ball
     private int xSpeed;         // To store x-axis speed
     private int ySpeed;         // To store y-axis speed
     private Animation currentAnimation;
@@ -30,9 +29,8 @@ public class Ball extends Item {
     Ball(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
         this.game = game;
-        this.speed = 4;
-        this.xSpeed = -speed;
-        this.ySpeed = -speed;
+        this.xSpeed = -4;
+        this.ySpeed = -4;
         currentAnimation = new Animation(Assets.ball, 60);
     }
 
@@ -44,16 +42,7 @@ public class Ball extends Item {
     public Game getGame() {
         return game;
     }
-
-    /**
-     * gets the speed of the ball
-     *
-     * @return speed
-     */
-    public int getSpeed() {
-        return speed;
-    }
-
+    
     /**
      * Gets the x-speed of the ball
      *
@@ -90,15 +79,6 @@ public class Ball extends Item {
         this.movable = movable;
     }
 
-    /**
-     * Sets the speed of the ball
-     *
-     * @param speed
-     */
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-    
     /**
      * Puts the ball and the bar in the default position
      */
@@ -191,7 +171,6 @@ public class Ball extends Item {
         if (getY() >= getGame().getHeight() - getHeight()) { //down
             Assets.lifeLost.play();
             setY(getGame().getHeight() - getHeight());
-            setSpeed(getSpeed() * -1);
             reset();
             getGame().setLives(getGame().getLives() - 1);
             getGame().getPowerUps().clear();
