@@ -236,22 +236,22 @@ public class Game implements Runnable {
                     if (Math.random() < 0.9) {
                         powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 16, meth.getY() + meth.getHeight() + 32, 32, 32));
                     }
-                    if (ball.getX() > meth.getX()) {
-                        ball.bounce(Ball.Side.LEFT);
-                    } else if (ball.getX() < meth.getX()) {
-                        ball.bounce(Ball.Side.RIGHT);
-                    }
                     if (ball.getY() > meth.getY()) {
                         ball.bounce(Ball.Side.TOP);
                     } else if (ball.getY() < meth.getY()) {
                         ball.bounce(Ball.Side.BOTTOM);
+                    }
+                    else if (ball.getX() > meth.getX()) {
+                        ball.bounce(Ball.Side.LEFT);
+                    } else if (ball.getX() < meth.getX()) {
+                        ball.bounce(Ball.Side.RIGHT);
                     }
                     methbricks.remove(i);
                     setScore(getScore() + 10);
                 }
                 if (ball.intersecta(player)) {
                     ball.setY(player.getY() - ball.getHeight());
-                    ball.bounce(Ball.Side.BOTTOM);
+                    ball.bounceAtPlayer(player.getWidth(), player.getX());
                     Assets.playerHit.play();
                 }
             }
