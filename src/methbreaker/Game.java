@@ -233,7 +233,7 @@ public class Game implements Runnable {
                 // checking collision between player and bad
                 if (ball.intersecta(meth)) {
                     Assets.brickBreaking.play();
-                    if (Math.random() < 0.9) {
+                    if (Math.random() < 0.1) {
                         powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 16, meth.getY() + meth.getHeight() + 32, 32, 32));
                     }
                     if (ball.getY() > meth.getY()) {

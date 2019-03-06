@@ -84,6 +84,7 @@ public class Ball extends Item {
      * Puts the ball and the bar in the default position
      */
     public void reset() {
+        game.eraseStates();
         setxSpeed(0);
         setySpeed(-SPEED * 2);
         game.getPlayer().setX(game.getWidth() / 2 - game.getWidth() / 14);
@@ -94,7 +95,7 @@ public class Ball extends Item {
         game.getPlayer().setCanMove(false);
         game.getPlayer().setSpeed(8);
         game.setStatesCounter(0);
-        game.eraseStates();
+        
     }
 
     /**
