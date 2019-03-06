@@ -165,6 +165,12 @@ public class Game implements Runnable {
         }
         ball.save(file);
         player.save(file);
+        file.format("%s", powerUps.size() + " ");
+        for (int i = 0; i < powerUps.size(); i++) {
+            PowerUp powerUp = powerUps.get(i);
+            
+            powerUp.save(file);
+        }
         
         file.close();
     }
@@ -185,7 +191,6 @@ public class Game implements Runnable {
         }
         states.put(STATEBOOST, false);
         states.put(STATEGROWTH, false);
-        save();
     }
 
     @Override
@@ -227,6 +232,10 @@ public class Game implements Runnable {
         if (getKeyManager().p && getKeyManager().isPressable()) {
             isPaused = !isPaused;
             getKeyManager().setPressable(false);
+        }
+        if (getKeyManager().g) {
+            System.out.println("Hello");
+            save(); 
         }
         // When the game is pause, the ticks are not executed.
         if (!isPaused) {

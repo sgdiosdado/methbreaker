@@ -7,6 +7,7 @@ package methbreaker;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.Formatter;
 
 /**
  *
@@ -16,7 +17,16 @@ public class PowerUp extends Item {
     
     private int speed;
     public enum Type {
-        BOOST, GROWTH
+        BOOST {
+            public String toString() {
+                return "BOOST";
+            }
+        },
+        GROWTH {
+            public String toString() {
+                return "GROWTH";
+            }
+        }
     }
     private Type type;
 
@@ -87,7 +97,10 @@ public class PowerUp extends Item {
         return obj instanceof Player && getHitbox().intersects(((Player) (obj)).getPerimetro());
     }  
     
-
+    public void save(Formatter file){
+        file.format("%s%s%s", getX() + " ", getY() + " ", getType().toString()+ " ");
+    }
+    
     @Override
     public void tick() {
         //only moves down
