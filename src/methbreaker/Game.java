@@ -165,6 +165,8 @@ public class Game implements Runnable {
         }
         ball.save(file);
         player.save(file);
+        file.format("%s", getScore() + " ");
+        file.format("%s", getLives() + " ");
         
         file.close();
     }
