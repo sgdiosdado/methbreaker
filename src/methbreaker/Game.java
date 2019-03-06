@@ -9,10 +9,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.io.File;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,6 +47,7 @@ public class Game implements Runnable {
     private HashMap<String, Boolean> states;// to store the states of all power-ups in game
     private int statesCounter;              // to count how much time has passed since state   
     private Formatter file;                 // to store the saved game file.
+    private Scanner scanner;
 
     /**
      * to	create	title,	width	and	height	and	set	the	game	is	still	not	running
@@ -177,6 +180,33 @@ public class Game implements Runnable {
         file.close();
     }
     
+    private void load(){
+        try{
+            int x, y, xspeed, yspeed, width, height;
+            scanner = new Scanner(new File("game.txt"));
+            x = scanner.nextInt();
+            y = scanner.nextInt();
+            xspeed = scanner.nextInt();
+            yspeed = scanner.nextInt();
+            ball.load(x, y, xspeed, yspeed);
+            x = scanner.nextInt();
+            y = scanner.nextInt();
+            xspeed = scanner.nextInt();
+            width = scanner.nextInt();
+            height = scanner.nextInt();
+            player.load(x, y, xspeed, width, height);
+            x = scanner.nextInt();
+            y = scanner.nextInt();
+            setScore(x);
+            setLives(y);
+            
+        } catch(Exception e){
+            // Cambiar
+            System.out.println("Error" + e);
+        }
+        
+    }
+    
     /**
      * Initialising the display window of the game
      */
@@ -236,8 +266,10 @@ public class Game implements Runnable {
             getKeyManager().setPressable(false);
         }
         if (getKeyManager().g) {
-            System.out.println("Hello");
             save(); 
+        }
+        if(getKeyManager().c){
+            load();
         }
         // When the game is pause, the ticks are not executed.
         if (!isPaused) {

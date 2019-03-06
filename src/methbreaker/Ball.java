@@ -173,6 +173,13 @@ public class Ball extends Item {
         file.format("%s%s%s%s", getX() + " ", getY() + " ", getxSpeed() + " ", getySpeed() + " ");
     }
     
+    public void load(int x, int y, int xspeed, int yspeed){
+        setX(x);
+        setY(y);
+        setxSpeed(xspeed);
+        setySpeed(yspeed);
+    }
+    
     @Override
     public void tick() {
         currentAnimation.tick();

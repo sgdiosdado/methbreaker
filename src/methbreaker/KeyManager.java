@@ -20,6 +20,7 @@ public class KeyManager implements KeyListener {
     public boolean right;       // flag to move right the player
     public boolean p;           // flag to pause the game
     public boolean g;           // flag to save the game
+    public boolean c;           // flag to load the game
     public boolean movement;    // flag to denote the player has pressed/released a key
     private boolean pressable;  // flag to do a one time press that has lasting effect
     
@@ -69,6 +70,7 @@ public class KeyManager implements KeyListener {
         right = keys[KeyEvent.VK_RIGHT];
         p = keys[KeyEvent.VK_P];
         g = keys[KeyEvent.VK_G];
+        c = keys[KeyEvent.VK_C];
     }
     
 }

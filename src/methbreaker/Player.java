@@ -83,6 +83,14 @@ public class Player extends Item {
     public void save(Formatter file){
         file.format("%s%s%s%s%s", getX() + " ", getY() + " ", getSpeed() + " ", getWidth() + " ", getHeight() + " ");
     }
+    
+    public void load(int x, int y, int speed, int width, int height){
+        setX(x);
+        setY(y);
+        setSpeed(speed);
+        setWidth(width);
+        setHeight(height);
+    }
 
     @Override
     public void tick() {
