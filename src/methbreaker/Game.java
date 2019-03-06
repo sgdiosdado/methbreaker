@@ -165,6 +165,8 @@ public class Game implements Runnable {
         }
         ball.save(file);
         player.save(file);
+        file.format("%s", getScore() + " ");
+        file.format("%s", getLives() + " ");
         file.format("%s", powerUps.size() + " ");
         for (int i = 0; i < powerUps.size(); i++) {
             PowerUp powerUp = powerUps.get(i);

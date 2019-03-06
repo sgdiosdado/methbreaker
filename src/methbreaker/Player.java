@@ -81,7 +81,7 @@ public class Player extends Item {
     }
     
     public void save(Formatter file){
-        file.format("%s%s%s%s", getX() + " ", getY() + " ", getWidth() + " ", getHeight() + " ");
+        file.format("%s%s%s%s%s", getX() + " ", getY() + " ", getSpeed() + " ", getWidth() + " ", getHeight() + " ");
     }
 
     @Override
