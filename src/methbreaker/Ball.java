@@ -16,6 +16,7 @@ import javafx.scene.shape.Circle;
  */
 public class Ball extends Item {
 
+    private final int SPEED = 4;
     private Game game;          // To store the context
     private boolean movable;    // Sets true when first move is done by player
     private int speed;          // To store the speed of the ball
@@ -30,9 +31,8 @@ public class Ball extends Item {
     Ball(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
         this.game = game;
-        this.speed = 4;
-        this.xSpeed = -speed;
-        this.ySpeed = -speed;
+        this.xSpeed = 0;
+        this.ySpeed = -SPEED * 2;
         currentAnimation = new Animation(Assets.ball, 60);
     }
 
@@ -43,15 +43,6 @@ public class Ball extends Item {
      */
     public Game getGame() {
         return game;
-    }
-
-    /**
-     * gets the speed of the ball
-     *
-     * @return speed
-     */
-    public int getSpeed() {
-        return speed;
     }
 
     /**
@@ -98,14 +89,16 @@ public class Ball extends Item {
     public void setSpeed(int speed) {
         this.speed = speed;
     }
-    
+
     /**
      * Puts the ball and the bar in the default position
      */
     public void reset() {
+        setxSpeed(0);
+        setySpeed(-SPEED * 2);
         game.getPlayer().setX(game.getWidth() / 2 - game.getWidth() / 14);
         game.getPlayer().setY(game.getHeight() - (game.PADDING * 2));
-        setX(((game.getPlayer().getX() + (game.getPlayer().getWidth())/2) - 16));
+        setX(((game.getPlayer().getX() + (game.getPlayer().getWidth()) / 2) - 16));
         setY(game.getPlayer().getY() - 32);
         setMovable(false);
         game.getPlayer().setCanMove(false);
@@ -134,27 +127,41 @@ public class Ball extends Item {
         this.ySpeed = ySpeed;
     }
 
+    public void bounceAtPlayer(int playerWidth, int playerxPosition) {
+
+        int playerSection = playerWidth / 5;
+        setySpeed(-SPEED * 2);
+        if (playerxPosition <= getX() && getX() < playerxPosition + playerSection) {
+            setxSpeed(-SPEED * 2);
+        }
+        if (playerxPosition + playerSection <= getX() && getX() < playerxPosition + 2 * playerSection) {
+            setxSpeed(-SPEED);
+        }
+        if (playerxPosition + playerSection * 2 <= getX() && getX() < playerxPosition + 3 * playerSection) {
+            setxSpeed(0);
+        }
+        if (playerxPosition + playerSection * 3 <= getX() && getX() < playerxPosition + 4 * playerSection) {
+            setxSpeed(SPEED);
+        }
+        if (playerxPosition + playerSection * 4 <= getX() && getX() < playerxPosition + 5 * playerSection) {
+            setxSpeed(SPEED * 2);
+        }
+    }
+
     public void bounce(Side side) {
         // Top side
-        if ((getxSpeed() < 0 && getySpeed() < 0) && side == Side.TOP) {
-            setySpeed(getySpeed() * -1);
-        } else if ((getxSpeed() > 0 && getySpeed() < 0) && side == Side.TOP) {
-            setySpeed(getySpeed() * -1);
-        } // Left side
-        else if ((getxSpeed() < 0 && getySpeed() > 0) && side == Side.LEFT) {
-            setxSpeed(getxSpeed() * -1);
-        } else if ((getxSpeed() < 0 && getySpeed() < 0) && side == Side.LEFT) {
-            setxSpeed(getxSpeed() * -1);
+        if (side == Side.TOP){
+            setySpeed(SPEED);
+        } 
+        // Left side
+        else if (side == Side.LEFT) {
+            setxSpeed(SPEED);
         } // Bottom side
-        else if ((getxSpeed() > 0 && getySpeed() > 0) && side == Side.BOTTOM) {
-            setySpeed(getySpeed() * -1);
-        } else if ((getxSpeed() < 0 && getySpeed() > 0) && side == Side.BOTTOM) {
-            setySpeed(getySpeed() * -1);
+        else if (side == Side.BOTTOM) {
+            setySpeed(-SPEED);
         } // Right side
-        else if ((getxSpeed() > 0 && getySpeed() < 0) && side == Side.RIGHT) {
-            setxSpeed(getxSpeed() * -1);
-        } else if ((getxSpeed() > 0 && getySpeed() > 0) && side == Side.RIGHT) {
-            setxSpeed(getxSpeed() * -1);
+        else if (side == Side.RIGHT) {
+            setxSpeed(-SPEED);
         }
     }
 
@@ -179,7 +186,7 @@ public class Ball extends Item {
             setY(getY() + getySpeed());
             setX(getX() + getxSpeed());
         }
-        // Reset x position and y position if colision
+        // Reset x position and y position if colision with the canvas
         if (getX() + getWidth() > getGame().getWidth()) {   // right side
             setX(getGame().getWidth() - getWidth());
             bounce(Side.RIGHT);
@@ -187,16 +194,14 @@ public class Ball extends Item {
             setX(0);
             bounce(Side.LEFT);
         }
-        
+
         if (getY() >= getGame().getHeight() - getHeight()) { //down
             Assets.lifeLost.play();
             setY(getGame().getHeight() - getHeight());
-            setSpeed(getSpeed() * -1);
             reset();
             getGame().setLives(getGame().getLives() - 1);
             getGame().getPowerUps().clear();
-        }
-        else if (getY() <= 0) { // up
+        } else if (getY() <= 0) { // up
             setY(0);
             bounce(Side.TOP);
         }
