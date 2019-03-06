@@ -7,6 +7,7 @@ package methbreaker;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.Formatter;
 
 /**
  *
@@ -77,6 +78,10 @@ public class Player extends Item {
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+    
+    public void save(Formatter file){
+        file.format("%s%s%s%s", getX() + " ", getY() + " ", getWidth() + " ", getHeight() + " ");
     }
 
     @Override
