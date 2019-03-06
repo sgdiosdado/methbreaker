@@ -15,11 +15,21 @@ import java.awt.Rectangle;
 public class PowerUp extends Item {
     
     private int speed;
+    public enum Type {
+        BOOST, GROWTH
+    }
+    private Type type;
 
     public PowerUp(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.speed = 3;
-    }
+        if (Math.random() < 0.5){
+            this.type = Type.BOOST;
+        }
+        else {
+            this.type = Type.GROWTH;
+        }
+     }
 
     public int getX() {
         return x;
@@ -31,6 +41,14 @@ public class PowerUp extends Item {
 
     public int getY() {
         return y;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public void setY(int y) {
@@ -78,7 +96,11 @@ public class PowerUp extends Item {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.powerUp, getX(), getY(), getWidth(), getHeight(), null);
+        if (getType() == Type.BOOST) {
+            g.drawImage(Assets.boostPowerUp, getX(), getY(), getWidth(), getHeight(), null);
+        } else if (getType() == Type.GROWTH) {
+            g.drawImage(Assets.growthPowerUp, getX(), getY(), getWidth(), getHeight(), null);
+        }
     }
     
 }

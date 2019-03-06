@@ -91,9 +91,7 @@ public class Ball extends Item {
         game.getPlayer().setCanMove(false);
         game.getPlayer().setSpeed(8);
         game.setStatesCounter(0);
-        for (Map.Entry<String, Boolean> entry : game.getStates().entrySet()) {
-            entry.setValue(false);
-        }
+        game.eraseStates();
     }
 
     /**

@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +22,8 @@ import java.util.logging.Logger;
 public class Game implements Runnable {
 
     public final int PADDING;               // constant for the padding of the videogame
-    public final String state2xSpeedPlayer; // constant for 2x speed player boost
+    public final String STATEBOOST;         // constant for 2x speed player boost
+    public final String STATEGROWTH;        // constant for growth in player boost
     private BufferStrategy bs;              // to have several buffers when displaying
     private Graphics g;                     // to paint objects
     private Display display;                // to display in the game 
@@ -61,7 +63,8 @@ public class Game implements Runnable {
         this.PADDING = 30;
         this.isPaused = false;
         this.lives = 3;
-        this.state2xSpeedPlayer = "2XPlayerSpeed";
+        this.STATEBOOST = "BoostSpeed";
+        this.STATEGROWTH = "GrowthPlayer";
     }
 
     /**
@@ -137,12 +140,21 @@ public class Game implements Runnable {
     public void setScore(int score) {
         this.score = score;
     }
-
-    /* 
-    public MouseManager getMouseManager() {
-        return mouseManager;
+    
+    public void eraseStates() {
+        
+        if (states.get(STATEBOOST)) {
+            player.setSpeed(player.getSpeed() / 2);
+        } else if (states.get(STATEGROWTH)) {
+            player.setWidth(player.getWidth() / 2);
+        }
+        
+        for (Map.Entry<String, Boolean> entry : getStates().entrySet()) {
+            entry.setValue(false);
+        }
+        statesCounter = 0;
     }
-     */
+    
     /**
      * Initialising the display window of the game
      */
@@ -157,7 +169,8 @@ public class Game implements Runnable {
                 methbricks.add(new Meth(PADDING + 64 * j, PADDING*2 + i * 64, 64, 64, this));
             }
         }
-        states.put(state2xSpeedPlayer, false);
+        states.put(STATEBOOST, false);
+        states.put(STATEGROWTH, false);
     }
 
     @Override
@@ -204,13 +217,11 @@ public class Game implements Runnable {
         if (!isPaused) {
             player.tick();
             ball.tick();
-            if (states.get(state2xSpeedPlayer)) {
+            if (states.get(STATEBOOST) || states.get(STATEGROWTH)){
                 statesCounter++;
             }
             if (statesCounter == 900) {
-                states.put(state2xSpeedPlayer, false);
-                statesCounter = 0;
-                player.setSpeed(player.getSpeed() / 2);
+                eraseStates();
             }
 
             if (!getKeyManager().movement) {
@@ -222,8 +233,8 @@ public class Game implements Runnable {
                 // checking collision between player and bad
                 if (ball.intersecta(meth)) {
                     Assets.brickBreaking.play();
-                    if (Math.random() < 0.1) {
-                        powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 8, meth.getY() + meth.getHeight() + 16, 16, 16));
+                    if (Math.random() < 0.9) {
+                        powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 16, meth.getY() + meth.getHeight() + 32, 32, 32));
                     }
                     if (ball.getX() > meth.getX()) {
                         ball.bounce(Ball.Side.LEFT);
@@ -253,13 +264,24 @@ public class Game implements Runnable {
                 }
 
                 if (powerUp.intersecta(player)) {
-                    Assets.powerUpSound.play();
-                    if (!states.get(state2xSpeedPlayer)) {
-                        player.setSpeed(player.getSpeed() * 2);
-                        states.put(state2xSpeedPlayer, true);
+                    if (powerUp.getType() == PowerUp.Type.BOOST) {
+                        Assets.boostPowerUpSound.play();
+                        if (!states.get(STATEBOOST)) {
+                            eraseStates();
+                            player.setSpeed(player.getSpeed() * 2);
+                            states.put(STATEBOOST, true);
+                        }
+                    } else if (powerUp.getType() == PowerUp.Type.GROWTH) {
+                        Assets.growthPowerUpSound.play();
+                        if (!states.get(STATEGROWTH)) {
+                            eraseStates();
+                            player.setWidth(player.getWidth() * 2);
+                            states.put(STATEGROWTH, true);
+                        }
                     }
                     powerUps.remove(powerUp);
                     statesCounter = 0;
+                    
                 }
             }
 
