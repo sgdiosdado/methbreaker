@@ -169,7 +169,7 @@ public class Ball extends Item {
     }
 
     public void save(Formatter file){
-        file.format("%s%s%s%s", getX() + " ", getY() + " ", getxSpeed() + " ", getySpeed() + " ", "\n");
+        file.format("%s%s%s%s", getX() + " ", getY() + " ", getxSpeed() + " ", getySpeed() + " ");
     }
     
     @Override
