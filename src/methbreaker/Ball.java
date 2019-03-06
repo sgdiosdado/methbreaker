@@ -7,6 +7,7 @@ package methbreaker;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.Formatter;
 import java.util.Map;
 import javafx.scene.shape.Circle;
 
@@ -167,6 +168,10 @@ public class Ball extends Item {
                 || obj instanceof Player && getHitbox().intersects(((Player) (obj)).getPerimetro()));
     }
 
+    public void save(Formatter file){
+        file.format("%s%s%s%s", getX() + " ", getY() + " ", getxSpeed() + " ", getySpeed() + " ", "\n");
+    }
+    
     @Override
     public void tick() {
         currentAnimation.tick();

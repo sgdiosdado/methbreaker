@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -42,7 +43,8 @@ public class Game implements Runnable {
     private boolean gameEnded;              // to store if the game is over
     private LinkedList<PowerUp> powerUps;   // to store the Power-Up object
     private HashMap<String, Boolean> states;// to store the states of all power-ups in game
-    private int statesCounter;              // to count how much time has passed since state
+    private int statesCounter;              // to count how much time has passed since state   
+    private Formatter file;                 // to store the saved game file.
 
     /**
      * to	create	title,	width	and	height	and	set	the	game	is	still	not	running
@@ -153,6 +155,18 @@ public class Game implements Runnable {
             entry.setValue(false);
         }
         statesCounter = 0;
+    }
+    
+    private void save(){
+        try{
+            file = new Formatter("game.txt");
+        } catch(Exception e){
+            System.out.println("Error");
+        }
+        ball.save(file);
+        player.save(file);
+        
+        file.close();
     }
     
     /**
