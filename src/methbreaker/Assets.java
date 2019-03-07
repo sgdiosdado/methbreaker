@@ -31,6 +31,7 @@ public class Assets {
     public static SoundClip playerHit;          // to store the ball hitting the player sound
     public static SoundClip music;              // to store the background music
     public static SoundClip gameOverMusic;      // to store the game over music.
+    public static SoundClip youDiedMusic;       // to store the game over music when dead.
 
     /**
      * Initialzes the images of the game
@@ -52,6 +53,7 @@ public class Assets {
         music = new SoundClip("/sounds/music.wav");
         lifeLost = new SoundClip("/sounds/life_lost.wav");
         playerHit = new SoundClip("/sounds/player_hit.wav");
+        youDiedMusic = new SoundClip("/sounds/youDied.wav");
         brickBreaking = new SoundClip("/sounds/meth_breaking.wav");
         gameOverMusic = new SoundClip("/sounds/gameOverMusic.wav");
         boostPowerUpSound = new SoundClip("/sounds/powerUp.wav");

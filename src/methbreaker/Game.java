@@ -345,6 +345,7 @@ public class Game implements Runnable {
         gameEnded = false;
         loadMethbricks();
         Assets.gameOverMusic.stop();
+        Assets.youDiedMusic.stop();
         loopSong(Assets.music);
     }
 
@@ -427,7 +428,7 @@ public class Game implements Runnable {
                 Assets.music.stop();
                 loopSong(Assets.gameOverMusic);
             }
-            else if (methbricks.size() == 0 && gameEnded) {
+            else if (gameEnded) {
                 if (getKeyManager().space) {
                     reset();
                 }
@@ -519,8 +520,10 @@ public class Game implements Runnable {
             }
             
             // When the player runs out of lives, the game finishes
-            if (getLives() == 0) {
+            if (getLives() == 0 && !gameEnded) {
                 gameEnded = true;
+                Assets.music.stop();
+                loopSong(Assets.youDiedMusic);
             }
         }
     }
