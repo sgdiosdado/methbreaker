@@ -177,18 +177,32 @@ public class Game implements Runnable {
         this.score = score;
     }
     
+    private void loadMethbricks() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 19; j++) {
+                methbricks.add(new Meth(PADDING + 64 * j, PADDING*2 + i * 64, 64, 64, this));
+            }
+        }
+    }    
+    
     public void eraseStates() {
         
         if (states.get(STATEBOOST)) {
-            player.setSpeed(player.getSpeed() / 2);
-        } else if (states.get(STATEGROWTH)) {
-            player.setWidth(player.getWidth() / 2);
+            player.setSpeed(8);
+        }
+        if (states.get(STATEGROWTH)) {
+            player.setWidth(getWidth() / 7);
         }
         
         for (Map.Entry<String, Boolean> entry : getStates().entrySet()) {
             entry.setValue(false);
         }
         statesCounter = 0;
+    }
+    
+    public void loopSong(SoundClip song) {
+        song.setLooping(true);
+        song.play();
     }
     
     private void save(){
@@ -271,6 +285,18 @@ public class Game implements Runnable {
         
     }
     
+    
+    private void reset() {
+        ball.reset();
+        eraseStates();
+        setLives(3);
+        setScore(0);
+        gameEnded = false;
+        loadMethbricks();
+        Assets.gameOverMusic.stop();
+        loopSong(Assets.music);
+    }
+    
     /**
      * Initialising the display window of the game
      */
@@ -280,15 +306,10 @@ public class Game implements Runnable {
         player = new Player(getWidth() / 2 - getWidth() / 14, getHeight() - (PADDING * 2), 1, getWidth() / 7, PADDING, this);
         ball = new Ball((player.getX() + (player.getWidth()) / 2) - 16, player.getY() - 32, 32, 32, this);
         display.getJframe().addKeyListener(keyManager);
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 19; j++) {
-                methbricks.add(new Meth(PADDING + 64 * j, PADDING*2 + i * 64, 64, 64, this));
-            }
-        }
+        loadMethbricks();
         states.put(STATEBOOST, false);
         states.put(STATEGROWTH, false);
-        Assets.music.setLooping(true);
-        Assets.music.play();
+        loopSong(Assets.music);
     }
 
     @Override
@@ -337,13 +358,21 @@ public class Game implements Runnable {
         if(getKeyManager().c){
             load();
         }
+        
         // When the game is pause, the ticks are not executed.
         if (!isPaused) {
             player.tick();
             ball.tick();
             
-            if (methbricks.size() == 0){
+            if (methbricks.size() == 0 && !gameEnded){
                 gameEnded = true;
+                Assets.music.stop();
+                loopSong(Assets.gameOverMusic);
+            }
+            else if (methbricks.size() == 0 && gameEnded) {
+                if (getKeyManager().space) {
+                    reset();
+                }
             }
             
             if (states.get(STATEBOOST) || states.get(STATEGROWTH)){
@@ -451,7 +480,7 @@ public class Game implements Runnable {
                 }
             } else {
                 if (methbricks.size() == 0) {
-                    System.out.println("You Win!");
+                    g.drawImage(Assets.gameOverWin, 0, 0, width, height, null);
                 } 
                 else {
                     g.drawImage(Assets.gameOverScreen, 0, 0, width, height, null);

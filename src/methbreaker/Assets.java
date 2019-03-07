@@ -23,6 +23,7 @@ public class Assets {
     public static BufferedImage boostPowerUp;   // to store the boost powerUp image
     public static BufferedImage growthPowerUp;  // to store the groth powerUp image
     public static BufferedImage gameOverScreen; // to store the game over image
+    public static BufferedImage gameOverWin;    // to store the game over image when the player wins
     public static SoundClip brickBreaking;      // to store the brick breaking sound
     public static SoundClip boostPowerUpSound;  // to store the boost power-up sound
     public static SoundClip growthPowerUpSound; // to store the growth power-up sound
@@ -35,15 +36,6 @@ public class Assets {
      * Initializing the images of the game
      */
     public static void init() {
-        // Loading sounds
-        brickBreaking = new SoundClip("/sounds/meth_breaking.wav");
-        boostPowerUpSound = new SoundClip("/sounds/powerUp.wav");
-        lifeLost = new SoundClip("/sounds/life_lost.wav");
-        playerHit = new SoundClip("/sounds/player_hit.wav");
-        growthPowerUpSound  = new SoundClip("/sounds/growth.wav");
-        music = new SoundClip("/sounds/music.wav");
-        gameOverMusic = new SoundClip("/sounds/gameOverMusic.wav");
-        
         // Loading images and spritesheets
         background = ImageLoader.loadImage("/images/desert_background.png");
         playerSprites = ImageLoader.loadImage("/images/hank_bar.png");
@@ -53,6 +45,17 @@ public class Assets {
         boostPowerUp = ImageLoader.loadImage("/images/boost_powerUp.png");
         growthPowerUp = ImageLoader.loadImage("/images/donut.png");
         gameOverScreen = ImageLoader.loadImage("/images/game_over.png");
+        gameOverWin = ImageLoader.loadImage("/images/YouWon.jpg");
+        
+        
+        // Loading sounds
+        brickBreaking = new SoundClip("/sounds/meth_breaking.wav");
+        boostPowerUpSound = new SoundClip("/sounds/powerUp.wav");
+        lifeLost = new SoundClip("/sounds/life_lost.wav");
+        playerHit = new SoundClip("/sounds/player_hit.wav");
+        growthPowerUpSound  = new SoundClip("/sounds/growth.wav");
+        music = new SoundClip("/sounds/music.wav");
+        gameOverMusic = new SoundClip("/sounds/gameOverMusic.wav");
         
         
         // Creating array of images before animations
