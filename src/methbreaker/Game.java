@@ -89,27 +89,58 @@ public class Game implements Runnable {
     public int getHeight() {
         return height;
     }
-
+    
+    /**
+     * To get the keyManager
+     * 
+     * @return <code>KeyManager</code> instance
+     */
     public KeyManager getKeyManager() {
         return keyManager;
     }
 
+    /**
+     * To get the Ball
+     * 
+     * @return <code>Ball</code> instance
+     */
     public Ball getBall() {
         return ball;
     }
-
+    
+    /**
+     * To get the score
+     * 
+     * @return <code>int</code> score
+     */
+    
     public int getScore() {
         return score;
     }
-
+    
+    /**
+     * To get the lives
+     * 
+     * @return <code>int</code> lives
+     */
     public int getLives() {
         return lives;
     }
-
+    
+    /**
+     * To get the Player
+     * 
+     * @return <code>Player</code> instance
+     */
     public Player getPlayer() {
         return player;
     }
-
+    
+    /**
+     * To get the powerUps
+     * 
+     * @return <code>LinkedList</code> of powerUps 
+     */
     public LinkedList<PowerUp> getPowerUps() {
         return powerUps;
     }
@@ -232,6 +263,7 @@ public class Game implements Runnable {
                 methbricks.add(new Meth(x, y, width, height, this));
             }
             
+            
         } catch(Exception e){
             // Cambiar
             System.out.println("Error" + e);
@@ -336,9 +368,9 @@ public class Game implements Runnable {
                     } else if (ball.getY() < meth.getY()) {
                         ball.bounce(Ball.Side.BOTTOM);
                     }
-                    else if (ball.getX() > meth.getX()) {
+                    if (ball.getX() > meth.getX() && ball.getxSpeed() != 0) {
                         ball.bounce(Ball.Side.LEFT);
-                    } else if (ball.getX() < meth.getX()) {
+                    } else if (ball.getX() < meth.getX() && ball.getxSpeed() != 0) {
                         ball.bounce(Ball.Side.RIGHT);
                     }
                     methbricks.remove(i);
