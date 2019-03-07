@@ -25,12 +25,14 @@ public class Assets {
     public static BufferedImage gameOverScreen; // to store the game over image
     public static SoundClip brickBreaking;      // to store the brick breaking sound
     public static SoundClip boostPowerUpSound;  // to store the boost power-up sound
-    public static SoundClip growthPowerUpSound;  // to store the growth power-up sound
+    public static SoundClip growthPowerUpSound; // to store the growth power-up sound
     public static SoundClip lifeLost;           // to store the life lost sound
     public static SoundClip playerHit;          // to store the ball hitting the player sound
+    public static SoundClip music;              // to store the background music
+    public static SoundClip gameOverMusic;      // to store the game over music.
 
     /**
-     * initializing the images of the game
+     * Initializing the images of the game
      */
     public static void init() {
         // Loading sounds
@@ -39,6 +41,8 @@ public class Assets {
         lifeLost = new SoundClip("/sounds/life_lost.wav");
         playerHit = new SoundClip("/sounds/player_hit.wav");
         growthPowerUpSound  = new SoundClip("/sounds/growth.wav");
+        music = new SoundClip("/sounds/music.wav");
+        gameOverMusic = new SoundClip("/sounds/gameOverMusic.wav");
         
         // Loading images and spritesheets
         background = ImageLoader.loadImage("/images/desert_background.png");

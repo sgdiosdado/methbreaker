@@ -287,6 +287,8 @@ public class Game implements Runnable {
         }
         states.put(STATEBOOST, false);
         states.put(STATEGROWTH, false);
+        Assets.music.setLooping(true);
+        Assets.music.play();
     }
 
     @Override
