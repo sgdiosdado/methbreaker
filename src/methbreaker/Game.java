@@ -219,7 +219,7 @@ public class Game implements Runnable {
         try{
             file = new Formatter("game.txt");
         } catch (Exception e) {
-            System.out.println("Error");
+            System.out.println("Hubo un problema con el guardado");
         }
         ball.save(file);
         player.save(file);
@@ -328,7 +328,7 @@ public class Game implements Runnable {
             }
 
         } catch (Exception e) {
-            System.out.println("Hubo un problema con el guardado.");
+            System.out.println("Hubo un problema con la carga.");
         }
 
     }
