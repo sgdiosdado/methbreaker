@@ -455,7 +455,7 @@ public class Game implements Runnable {
                     Assets.brickBreaking.play();
                     
                     // Calculates random drop rate for powerUps
-                    if (Math.random() < 0.9) {
+                    if (Math.random() < 0.1) {
                         powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 16, meth.getY() + meth.getHeight() + 32, 32, 32));
                     }
                     
