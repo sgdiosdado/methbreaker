@@ -241,10 +241,13 @@ public class Game implements Runnable {
 
             meth.save(file);
         }
-
+        
+        file.format("%s", statesCounter + " ");
+        file.format("%s", states.toString() + " ");
+       
         file.close();
     }
-
+    
     /**
      * Reads the saved-game file and uses the load methods of the classes to
      * restore the saved game
@@ -302,6 +305,27 @@ public class Game implements Runnable {
                 height = scanner.nextInt();
                 methbricks.add(new Meth(x, y, width, height, this));
             }
+            
+            x = scanner.nextInt();
+            statesCounter = x;
+            
+            int statesSize = states.size();
+            states.clear();
+            
+            for (int i = 0; i < statesSize; i++) {
+                type = scanner.next();
+                type = type.replace("{", "");
+                int index = type.indexOf("=");
+                String key = type.substring(0, index);
+                String value = type.substring(index + 1, type.length() - 1);
+
+                if (value.equals("false")) {
+                    states.put(key, false);
+                }
+                else if (value.equals("true")) {
+                    states.put(key, true);
+                }
+            }
 
         } catch (Exception e) {
             System.out.println("Hubo un problema con el guardado.");
@@ -311,6 +335,7 @@ public class Game implements Runnable {
     
     private void reset() {
         ball.reset();
+        powerUps.clear();
         eraseStates();
         setLives(3);
         setScore(0);
