@@ -19,7 +19,7 @@ public abstract class Item {
     protected int height;
     
     /**
-     * Set the initial values to create the item
+     * Sets the initial values to create the item
      * @param x <b>x</b> position of the object
      * @param y <b>y</b> position of the object
      */
@@ -31,7 +31,7 @@ public abstract class Item {
     }
 
     /**
-     * Get x value
+     * Gets x value
      * @return x 
      */
     public int getX() {
@@ -39,7 +39,7 @@ public abstract class Item {
     }
 
     /**
-     * Get y value
+     * Gets y value
      * @return y 
      */
     public int getY() {
@@ -47,7 +47,7 @@ public abstract class Item {
     }
     
     /**
-     * Get width value
+     * Gets width value
      * @return width
      */
     public int getWidth() {
@@ -55,7 +55,7 @@ public abstract class Item {
     }
     
     /**
-     * Get height value
+     * Gets height value
      * @return height
      */
     public int getHeight() {
@@ -63,7 +63,7 @@ public abstract class Item {
     }
 
     /**
-     * Set x value
+     * Sets x value
      * @param x to modify
      */
     public void setX(int x) {
@@ -71,7 +71,7 @@ public abstract class Item {
     }
 
     /**
-     * Set y value
+     * Sets y value
      * @param y to modify
      */
     public void setY(int y) {
@@ -79,7 +79,7 @@ public abstract class Item {
     }
 
     /**
-     * Set width value
+     * Sets width value
      * @param width to modify
      */
     public void setWidth(int width) {
@@ -87,7 +87,7 @@ public abstract class Item {
     }
     
     /**
-     * Set height value
+     * Sets height value
      * @param height to modify
      */
     public void setHeight(int height) {
@@ -95,12 +95,12 @@ public abstract class Item {
     }
     
     /**
-     * To update positions of the item for every tick
+     * Updates positions of the item for every tick
      */
     public abstract void tick();
     
     /**
-     * To paint the item
+     * Paints the item
      * @param g <b>Graphics</b> object to paint the item
      */
     public abstract void render(Graphics g);

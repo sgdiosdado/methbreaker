@@ -21,21 +21,33 @@ public class KeyManager implements KeyListener {
     public boolean p;           // flag to pause the game
     public boolean g;           // flag to save the game
     public boolean c;           // flag to load the game
-    public boolean space;           // flag to reset the game
+    public boolean space;       // flag to reset the game
     public boolean movement;    // flag to denote the player has pressed/released a key
     private boolean pressable;  // flag to do a one time press that has lasting effect
-    
-    private boolean keys[]; // to store all the flags for every key
+    private boolean keys[];     // to store all the flags for every key
 
+    /**
+     * Initializes the keyManager
+     */
     public KeyManager() {
         keys = new boolean[256];
         this.pressable = true;
     }
 
+    /**
+     * Gets if it's in a pressable state
+     * 
+     * @return 
+     */
     public boolean isPressable() {
         return pressable;
     }
 
+    /**
+     * Sets the pressable state true or not
+     * 
+     * @param pressable 
+     */
     public void setPressable(boolean pressable) {
         this.pressable = pressable;
     }
@@ -44,6 +56,11 @@ public class KeyManager implements KeyListener {
     public void keyTyped(KeyEvent e) {
     }
 
+    /**
+     * Changes a corresponding value of the array when a key is pressed
+     * 
+     * @param e 
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         // set true to every key pressed
@@ -51,6 +68,11 @@ public class KeyManager implements KeyListener {
         movement = true;
     }
 
+    /**
+     * Changes a corresponding value of the array when a key is released
+     * 
+     * @param e 
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         // set false to every key released
@@ -62,7 +84,7 @@ public class KeyManager implements KeyListener {
     }
     
     /**
-     * to enable or disable moves on every tick
+     * Enables or disables moves on every tick
      */
     public void tick() {
         up = keys[KeyEvent.VK_UP];

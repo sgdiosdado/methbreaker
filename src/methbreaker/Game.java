@@ -309,6 +309,9 @@ public class Game implements Runnable {
 
     }
     
+    /**
+     * Restores the game to initial state
+     */
     private void reset() {
         ball.reset();
         eraseStates();
@@ -335,9 +338,11 @@ public class Game implements Runnable {
         loopSong(Assets.music);
     }
 
+    /**
+     * Keeps tracks of FPS of the game
+     */
     @Override
     public void run() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         init();
         // frames per second
         int fps = 60;
@@ -367,16 +372,21 @@ public class Game implements Runnable {
         stop();
     }
 
+    /**
+     * Checks all the instances 60 times per second
+     */
     private void tick() {
         keyManager.tick();
-        // To check the pause flag and modify it when need it.
+        // To check the pause flag and modify it when need it
         if (getKeyManager().p && getKeyManager().isPressable()) {
             isPaused = !isPaused;
             getKeyManager().setPressable(false);
         }
+        // When pressed, calls the save method
         if (getKeyManager().g) {
             save();
         }
+        // When pressed, calls the load method
         if (getKeyManager().c) {
             load();
         }
@@ -386,6 +396,7 @@ public class Game implements Runnable {
             player.tick();
             ball.tick();
             
+            // If there are no bricks, the player wins
             if (methbricks.size() == 0 && !gameEnded){
                 gameEnded = true;
                 Assets.music.stop();
@@ -397,25 +408,32 @@ public class Game implements Runnable {
                 }
             }
 
+            // After 15 seconds (900 ticks) the powerUps go off
             if (states.get(STATEBOOST) || states.get(STATEGROWTH)) {
                 statesCounter++;
             }
             if (statesCounter == 900) {
                 eraseStates();
             }
-
+            
+            // Stops ticking a key until it's released
             if (!getKeyManager().movement) {
                 getPlayer().setCanMove(true);
             }
-
+            
+            // Collisions of the ball with all the bricks
             for (int i = 0; i < methbricks.size(); i++) {
                 Meth meth = methbricks.get(i);
-                // checking collision between player and bad
+                // When ball hits meth
                 if (ball.intersecta(meth)) {
                     Assets.brickBreaking.play();
+                    
+                    // Calculates random drop rate for powerUps
                     if (Math.random() < 0.9) {
                         powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 16, meth.getY() + meth.getHeight() + 32, 32, 32));
                     }
+                    
+                    // Checks at which side of the block the collision took in
                     if (ball.getY() > meth.getY()) {
                         ball.bounce(Ball.Side.TOP);
                     } else if (ball.getY() < meth.getY()) {
@@ -426,9 +444,13 @@ public class Game implements Runnable {
                     } else if (ball.getX() < meth.getX() && ball.getxSpeed() != 0) {
                         ball.bounce(Ball.Side.RIGHT);
                     }
+                    
+                    // The brick is remove from LinkedList and it adds 10 points to the score
                     methbricks.remove(i);
                     setScore(getScore() + 10);
                 }
+                
+                // When the ball hits the player
                 if (ball.intersecta(player)) {
                     ball.setY(player.getY() - ball.getHeight());
                     ball.bounceAtPlayer(player.getWidth(), player.getX());
@@ -436,14 +458,20 @@ public class Game implements Runnable {
                 }
             }
 
+            // For each powerUp instance
             for (int i = 0; i < powerUps.size(); i++) {
                 PowerUp powerUp = powerUps.get(i);
                 powerUp.tick();
+                
+                // When the powerUp touchs the bottom of the canvas it's removed
                 if (powerUp.getY() >= getHeight() - powerUp.getHeight()) {
                     powerUps.remove(powerUp);
                 }
-
+                
+                // When the powerUp hits the player
                 if (powerUp.intersecta(player)) {
+                    
+                    // Gives the player a movement speed bonus
                     if (powerUp.getType() == PowerUp.Type.BOOST) {
                         Assets.boostPowerUpSound.play();
                         if (!states.get(STATEBOOST)) {
@@ -451,6 +479,7 @@ public class Game implements Runnable {
                             player.setSpeed(player.getSpeed() * 2);
                             states.put(STATEBOOST, true);
                         }
+                    // Gives the player a size bonus
                     } else if (powerUp.getType() == PowerUp.Type.GROWTH) {
                         Assets.growthPowerUpSound.play();
                         if (!states.get(STATEGROWTH)) {
@@ -461,10 +490,10 @@ public class Game implements Runnable {
                     }
                     powerUps.remove(powerUp);
                     statesCounter = 0;
-
                 }
             }
-
+            
+            // When the player runs out of lives, the game finishes
             if (getLives() == 0) {
                 gameEnded = true;
             }
@@ -472,41 +501,51 @@ public class Game implements Runnable {
     }
 
     private void render() {
-        //get the buffer from the display
+        // Get the buffer from the display
         bs = display.getCanvas().getBufferStrategy();
-        /*	if	it	is	null,	we	define	one	with	3	buffers	to	display	images	of
-	the	game,	if	not	null,	then	we	display every	image	of	the	game	but
-	after	clearing	the	Rectanlge,	getting	the	graphic	object	from	the	
-	buffer	strategy	element.	
-	show	the	graphic	and	dispose	it	to	the	trash	system
+        /* 
+         * If it is null, we define one with 3 buffers to display images of the game,
+         * if not null, then we display every image of the game but after clearing the
+         * Rectanlge, getting the graphic object from the buffer strategy element.	
+         * Show the graphic and dispose it to the trash system
          */
         if (bs == null) {
             display.getCanvas().createBufferStrategy(3);
         } else {
             g = bs.getDrawGraphics();
             if (!gameEnded) {
+                // Draws the background, score and lives
                 g.drawImage(Assets.background, 0, 0, width, height, null);
                 g.setFont(new Font("Dialog", Font.BOLD, 24));
                 g.setColor(Color.WHITE);
                 g.drawString("Score: " + getScore(), PADDING, 24 + PADDING / 2);
-                player.render(g);
-                for (int i = 0; i < methbricks.size(); i++) {
-                    methbricks.get(i).render(g);
-                }
-                ball.render(g);
                 for (int i = 0; i < lives; i++) {
                     g.drawImage(Assets.lives, getWidth() - 40 - (i * 40) - PADDING - 5, 8, 40, 48, null); // EL -5 es estetico
                 }
+                
+                // Draws the bricks
+                for (int i = 0; i < methbricks.size(); i++) {
+                    methbricks.get(i).render(g);
+                }
+                
+                // Draws the existing powerUps
                 for (int i = 0; i < powerUps.size(); i++) {
                     powerUps.get(i).render(g);
                 }
+                
+                // Draws the player and ball
+                player.render(g);
+                ball.render(g);
             } else {
                 if (methbricks.size() == 0) {
+                    // Winning screen
                     g.drawImage(Assets.gameOverWin, 0, 0, width, height, null);
                 } 
                 else {
+                    // Loosing screen
                     g.drawImage(Assets.gameOverScreen, 0, 0, width, height, null);
                 }
+                // Stops all instances
                 ball.setxSpeed(0);
                 ball.setySpeed(0);
                 player.setCanMove(false);
@@ -519,7 +558,7 @@ public class Game implements Runnable {
     }
 
     /**
-     * setting	the	thead	for	the	game
+     * Sets the thread for the game
      */
     public synchronized void start() {
         if (!running) {
@@ -530,7 +569,7 @@ public class Game implements Runnable {
     }
 
     /**
-     * stopping the thread
+     * Stops the thread
      */
     public synchronized void stop() {
         if (running) {

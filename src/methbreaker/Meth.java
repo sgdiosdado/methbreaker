@@ -15,18 +15,36 @@ import java.util.Formatter;
  */
 public class Meth extends Item {
     
-    private boolean exists;
     private Game game;
-    
+    private boolean exists;
+
+    /**
+     * Constructs a Meth instance
+     * 
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param game 
+     */
     Meth(int x, int y, int width, int height, Game game)  {
         super(x, y, width, height);
         this.game = game;
     }
     
+    /**
+     * Gets a Rectangle instance, functions as a hitbox
+     * @return 
+     */
     public Rectangle getPerimetro() {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
     
+    /**
+     * Writes it's needed attributes in a file
+     * 
+     * @param file 
+     */
     public void save(Formatter file){
         file.format("%s%s%s%s", getX() + " ", getY() + " ", getWidth() + " ", getHeight() + " ");
     }
@@ -35,6 +53,11 @@ public class Meth extends Item {
     public void tick() {
     }
 
+    /**
+     * Draws the instance in the canvas
+     * 
+     * @param g 
+     */
     @Override
     public void render(Graphics g) {
         g.drawImage(Assets.methbrick, getX(), getY(), getWidth(), getHeight(), null);
