@@ -23,6 +23,7 @@ public class Assets {
     public static BufferedImage boostPowerUp;   // to store the boost powerUp image
     public static BufferedImage growthPowerUp;  // to store the groth powerUp image
     public static BufferedImage gameOverScreen; // to store the game over image
+    public static BufferedImage gameOverWin;    // to store the game over image when the player wins
     public static SoundClip brickBreaking;      // to store the brick breaking sound
     public static SoundClip boostPowerUpSound;  // to store the boost power-up sound
     public static SoundClip growthPowerUpSound; // to store the growth power-up sound
@@ -35,6 +36,18 @@ public class Assets {
      * Initialzes the images of the game
      */
     public static void init() {
+
+        // Loading images and spritesheets
+        lives = ImageLoader.loadImage("/images/life.png");
+        methbrick = ImageLoader.loadImage("/images/methbrick.png");
+        background = ImageLoader.loadImage("/images/desert_background.png");
+        gameOverWin = ImageLoader.loadImage("/images/YouWon.jpg");
+        ballSprites = ImageLoader.loadImage("/images/pizza.png");
+        boostPowerUp = ImageLoader.loadImage("/images/boost_powerUp.png");
+        playerSprites = ImageLoader.loadImage("/images/hank_bar.png");
+        growthPowerUp = ImageLoader.loadImage("/images/donut.png");
+        gameOverScreen = ImageLoader.loadImage("/images/game_over.png");
+
         // Loading sounds
         music = new SoundClip("/sounds/music.wav");
         lifeLost = new SoundClip("/sounds/life_lost.wav");
@@ -44,17 +57,7 @@ public class Assets {
         boostPowerUpSound = new SoundClip("/sounds/powerUp.wav");
         growthPowerUpSound = new SoundClip("/sounds/growth.wav");
 
-        // Loading images and spritesheets
-        lives = ImageLoader.loadImage("/images/life.png");
-        methbrick = ImageLoader.loadImage("/images/methbrick.png");
-        background = ImageLoader.loadImage("/images/desert_background.png");
-        ballSprites = ImageLoader.loadImage("/images/pizza.png");
-        boostPowerUp = ImageLoader.loadImage("/images/boost_powerUp.png");
-        playerSprites = ImageLoader.loadImage("/images/hank_bar.png");
-        growthPowerUp = ImageLoader.loadImage("/images/donut.png");
-        gameOverScreen = ImageLoader.loadImage("/images/game_over.png");
-
-        // Creating array of images for animations
+        // Creating array of images before animations
         ball = new BufferedImage[4];
         player = new BufferedImage[4];
         SpriteSheet ballSpritesheet = new SpriteSheet(ballSprites);
