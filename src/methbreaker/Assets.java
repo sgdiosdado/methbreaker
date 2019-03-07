@@ -32,40 +32,39 @@ public class Assets {
     public static SoundClip gameOverMusic;      // to store the game over music.
 
     /**
-     * Initializing the images of the game
+     * Initialzes the images of the game
      */
     public static void init() {
         // Loading sounds
-        brickBreaking = new SoundClip("/sounds/meth_breaking.wav");
-        boostPowerUpSound = new SoundClip("/sounds/powerUp.wav");
+        music = new SoundClip("/sounds/music.wav");
         lifeLost = new SoundClip("/sounds/life_lost.wav");
         playerHit = new SoundClip("/sounds/player_hit.wav");
-        growthPowerUpSound  = new SoundClip("/sounds/growth.wav");
-        music = new SoundClip("/sounds/music.wav");
+        brickBreaking = new SoundClip("/sounds/meth_breaking.wav");
         gameOverMusic = new SoundClip("/sounds/gameOverMusic.wav");
-        
+        boostPowerUpSound = new SoundClip("/sounds/powerUp.wav");
+        growthPowerUpSound = new SoundClip("/sounds/growth.wav");
+
         // Loading images and spritesheets
-        background = ImageLoader.loadImage("/images/desert_background.png");
-        playerSprites = ImageLoader.loadImage("/images/hank_bar.png");
-        methbrick = ImageLoader.loadImage("/images/methbrick.png");
-        ballSprites = ImageLoader.loadImage("/images/pizza.png");
         lives = ImageLoader.loadImage("/images/life.png");
+        methbrick = ImageLoader.loadImage("/images/methbrick.png");
+        background = ImageLoader.loadImage("/images/desert_background.png");
+        ballSprites = ImageLoader.loadImage("/images/pizza.png");
         boostPowerUp = ImageLoader.loadImage("/images/boost_powerUp.png");
+        playerSprites = ImageLoader.loadImage("/images/hank_bar.png");
         growthPowerUp = ImageLoader.loadImage("/images/donut.png");
         gameOverScreen = ImageLoader.loadImage("/images/game_over.png");
-        
-        
-        // Creating array of images before animations
-        SpriteSheet playerSpritesheet = new SpriteSheet(playerSprites);
-        player = new BufferedImage[4];
+
+        // Creating array of images for animations
         ball = new BufferedImage[4];
+        player = new BufferedImage[4];
         SpriteSheet ballSpritesheet = new SpriteSheet(ballSprites);
-        
+        SpriteSheet playerSpritesheet = new SpriteSheet(playerSprites);
+
         // Cropping the pictures from the seet into the array
         for (int i = 0; i < player.length; i++) {
             player[i] = playerSpritesheet.crop(i * 64, 0, 64, 18);
         }
-        for(int i = 0; i < ball.length; i++){
+        for (int i = 0; i < ball.length; i++) {
             ball[i] = ballSpritesheet.crop(i * 64, 0, 64, 64);
         }
     }

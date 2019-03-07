@@ -12,16 +12,18 @@ import java.awt.image.BufferedImage;
  * @author inakijaneiro
  */
 public class Animation {
+
     private int speed;      // for the speed of every frame
     private int index;      // for the index of the next frame to paint
     private long lastTime;  // to save the previous time of the animation
     private long timer;     // to acumulate the time of the animation
     private BufferedImage[] frames; // to store every image - frame
-    private boolean start;         
+    private boolean start;
     public boolean ended;
-    
+
     /**
      * Creating the animation with all the frames and the speed for each
+     *
      * @param frames an <code> array </code> of images
      * @param speed an <code>int</code> value for the speed of every frame
      */
@@ -32,31 +34,19 @@ public class Animation {
         timer = 0;              // initializing timer
         lastTime = System.currentTimeMillis(); // getting the initial time
     }
-    
+
+    /**
+     * Gets the current frame at the time when is called
+     *
+     * @return <code>frames[index]</code>
+     */
     public BufferedImage getCurrentFrame() {
         return frames[index];
     }
-    
-    public void setStart(boolean start) {
-        this.start = start;
-    }
-    
-    public void setFrames(BufferedImage[] frames) {
-        this.frames = frames;
-    }
-    
-    public void setIndex(int index) {
-        this.index = 0;
-    }
-    
-    public void setSpeed(int speed){
-        this.speed = speed;
-    }
-    
-    public boolean getEnded() {
-        return ended;
-    }
-    
+
+    /**
+     * Ticker for the class
+     */
     public void tick() {
         // acumulating time from the privious tick to this one
         timer += System.currentTimeMillis() - lastTime;
@@ -75,6 +65,5 @@ public class Animation {
         }
 
     }
-    
-    
+
 }

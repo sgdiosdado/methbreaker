@@ -50,11 +50,11 @@ public class Game implements Runnable {
     private Scanner scanner;
 
     /**
-     * to	create	title,	width	and	height	and	set	the	game	is	still	not	running
+     * To create title,	width and height and set the game is still not running
      *
-     * @param	title	to	set	the	title	of	the	window
-     * @param	width	to	set	the	width	of	the	window
-     * @param	height	to	set	the	height	of	the	window
+     * @param title to set the title of the window
+     * @param width to set the width of the window
+     * @param height to set the height of the window
      */
     public Game(String title, int width, int height) {
         this.title = title;
@@ -89,10 +89,10 @@ public class Game implements Runnable {
     public int getHeight() {
         return height;
     }
-    
+
     /**
      * To get the keyManager
-     * 
+     *
      * @return <code>KeyManager</code> instance
      */
     public KeyManager getKeyManager() {
@@ -101,100 +101,110 @@ public class Game implements Runnable {
 
     /**
      * To get the Ball
-     * 
+     *
      * @return <code>Ball</code> instance
      */
     public Ball getBall() {
         return ball;
     }
-    
+
     /**
      * To get the score
-     * 
+     *
      * @return <code>int</code> score
      */
-    
     public int getScore() {
         return score;
     }
-    
+
     /**
      * To get the lives
-     * 
+     *
      * @return <code>int</code> lives
      */
     public int getLives() {
         return lives;
     }
-    
+
     /**
      * To get the Player
-     * 
+     *
      * @return <code>Player</code> instance
      */
     public Player getPlayer() {
         return player;
     }
-    
+
     /**
      * To get the powerUps
-     * 
-     * @return <code>LinkedList</code> of powerUps 
+     *
+     * @return <code>LinkedList</code> of powerUps
      */
     public LinkedList<PowerUp> getPowerUps() {
         return powerUps;
     }
 
+    /**
+     * Gets HashMap with all the states (powerUps)
+     *
+     * @return
+     */
     public HashMap<String, Boolean> getStates() {
         return states;
     }
 
-    public void setStates(HashMap<String, Boolean> states) {
-        this.states = states;
-    }
-
-    public int getStatesCounter() {
-        return statesCounter;
-    }
-
+    /**
+     *
+     *
+     * @param statesCounter
+     */
     public void setStatesCounter(int statesCounter) {
         this.statesCounter = statesCounter;
     }
 
-    public void setPowerUps(LinkedList<PowerUp> powerUps) {
-        this.powerUps = powerUps;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
+    /**
+     * Sets the amount of lives available
+     *
+     * @param lives
+     */
     public void setLives(int lives) {
         this.lives = lives;
     }
 
+    /**
+     * Sets the score
+     *
+     * @param score
+     */
     public void setScore(int score) {
         this.score = score;
     }
-    
+
+    /**
+     * Erases all states (powerUps)
+     */
     public void eraseStates() {
-        
+
         if (states.get(STATEBOOST)) {
             player.setSpeed(player.getSpeed() / 2);
         } else if (states.get(STATEGROWTH)) {
             player.setWidth(player.getWidth() / 2);
         }
-        
+
         for (Map.Entry<String, Boolean> entry : getStates().entrySet()) {
             entry.setValue(false);
         }
         statesCounter = 0;
     }
-    
-    private void save(){
-        try{
+
+    /**
+     * Calls every save method from the classes and writes the score and lives
+     * on a file
+     */
+    private void save() {
+        try {
             file = new Formatter("game.txt");
-        } catch(Exception e){
+        } catch (Exception e) {
             System.out.println("Error");
         }
         ball.save(file);
@@ -202,47 +212,63 @@ public class Game implements Runnable {
         file.format("%s", getScore() + " ");
         file.format("%s", getLives() + " ");
         file.format("%s", powerUps.size() + " ");
+
+        // Iterates over all the powerUps and write them in the file
         for (int i = 0; i < powerUps.size(); i++) {
             PowerUp powerUp = powerUps.get(i);
-            
+
             powerUp.save(file);
         }
         file.format("%s", methbricks.size() + " ");
-        for (int i = 0 ; i < methbricks.size(); i++) {
+
+        // Iterates over all the bricks and write them in the file
+        for (int i = 0; i < methbricks.size(); i++) {
             Meth meth = methbricks.get(i);
-            
+
             meth.save(file);
         }
-        
+
         file.close();
     }
-    
-    private void load(){
-        try{
+
+    /**
+     * Reads the saved-game file and uses the load methods of the classes to
+     * restore the saved game
+     */
+    private void load() {
+        try {
             int x, y, xspeed, yspeed, width, height;
             String type;
             scanner = new Scanner(new File("game.txt"));
+
+            // Loads ball attributes
             x = scanner.nextInt();
             y = scanner.nextInt();
             xspeed = scanner.nextInt();
             yspeed = scanner.nextInt();
             ball.load(x, y, xspeed, yspeed);
+
             if (xspeed > 0 || yspeed > 0) {
                 ball.setMovable(true);
-            } 
+            }
+
+            // Loads player attributes
             x = scanner.nextInt();
             y = scanner.nextInt();
             xspeed = scanner.nextInt();
             width = scanner.nextInt();
             height = scanner.nextInt();
             player.load(x, y, xspeed, width, height);
+
+            // Loads score and lives
             x = scanner.nextInt();
             y = scanner.nextInt();
             setScore(x);
             setLives(y);
+
+            // Loads powerUps
             int numOfPowerUps = scanner.nextInt();
             powerUps.clear();
-            
             for (int i = 0; i < numOfPowerUps; i++) {
                 x = scanner.nextInt();
                 y = scanner.nextInt();
@@ -251,10 +277,10 @@ public class Game implements Runnable {
                 type = scanner.next();
                 powerUps.add(new PowerUp(x, y, width, height, type));
             }
-            
+
+            // Loads methbricks attributes
             int numOfMethbricks = scanner.nextInt();
             methbricks.clear();
-            
             for (int i = 0; i < numOfMethbricks; i++) {
                 x = scanner.nextInt();
                 y = scanner.nextInt();
@@ -262,15 +288,13 @@ public class Game implements Runnable {
                 height = scanner.nextInt();
                 methbricks.add(new Meth(x, y, width, height, this));
             }
-            
-            
-        } catch(Exception e){
-            // Cambiar
-            System.out.println("Error" + e);
+
+        } catch (Exception e) {
+            System.out.println("Hubo un problema con el guardado.");
         }
-        
+
     }
-    
+
     /**
      * Initialising the display window of the game
      */
@@ -280,9 +304,10 @@ public class Game implements Runnable {
         player = new Player(getWidth() / 2 - getWidth() / 14, getHeight() - (PADDING * 2), 1, getWidth() / 7, PADDING, this);
         ball = new Ball((player.getX() + (player.getWidth()) / 2) - 16, player.getY() - 32, 32, 32, this);
         display.getJframe().addKeyListener(keyManager);
+        // Dibuja los 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 19; j++) {
-                methbricks.add(new Meth(PADDING + 64 * j, PADDING*2 + i * 64, 64, 64, this));
+                methbricks.add(new Meth(PADDING + 64 * j, PADDING * 2 + i * 64, 64, 64, this));
             }
         }
         states.put(STATEBOOST, false);
@@ -324,7 +349,6 @@ public class Game implements Runnable {
     }
 
     private void tick() {
-
         keyManager.tick();
         // To check the pause flag and modify it when need it.
         if (getKeyManager().p && getKeyManager().isPressable()) {
@@ -332,21 +356,21 @@ public class Game implements Runnable {
             getKeyManager().setPressable(false);
         }
         if (getKeyManager().g) {
-            save(); 
+            save();
         }
-        if(getKeyManager().c){
+        if (getKeyManager().c) {
             load();
         }
         // When the game is pause, the ticks are not executed.
         if (!isPaused) {
             player.tick();
             ball.tick();
-            
-            if (methbricks.size() == 0){
+
+            if (methbricks.size() == 0) {
                 gameEnded = true;
             }
-            
-            if (states.get(STATEBOOST) || states.get(STATEGROWTH)){
+
+            if (states.get(STATEBOOST) || states.get(STATEGROWTH)) {
                 statesCounter++;
             }
             if (statesCounter == 900) {
@@ -410,7 +434,7 @@ public class Game implements Runnable {
                     }
                     powerUps.remove(powerUp);
                     statesCounter = 0;
-                    
+
                 }
             }
 
@@ -437,7 +461,7 @@ public class Game implements Runnable {
                 g.drawImage(Assets.background, 0, 0, width, height, null);
                 g.setFont(new Font("Dialog", Font.BOLD, 24));
                 g.setColor(Color.WHITE);
-                g.drawString("Score: " + getScore(), PADDING, 24 + PADDING/2);
+                g.drawString("Score: " + getScore(), PADDING, 24 + PADDING / 2);
                 player.render(g);
                 for (int i = 0; i < methbricks.size(); i++) {
                     methbricks.get(i).render(g);
@@ -452,8 +476,7 @@ public class Game implements Runnable {
             } else {
                 if (methbricks.size() == 0) {
                     System.out.println("You Win!");
-                } 
-                else {
+                } else {
                     g.drawImage(Assets.gameOverScreen, 0, 0, width, height, null);
                 }
                 ball.setxSpeed(0);

@@ -28,6 +28,15 @@ public class Ball extends Item {
         TOP, RIGHT, BOTTOM, LEFT
     }
 
+    /**
+     * Constructs a Ball instance
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param game
+     */
     Ball(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
         this.game = game;
@@ -73,16 +82,17 @@ public class Ball extends Item {
     }
 
     /**
-     * Makes the ball movable or unmovable
+     * Makes the ball movable or not
      *
      * @param movable
      */
     public void setMovable(boolean movable) {
         this.movable = movable;
     }
-    
+
     /**
      * Puts the ball and the bar in the default position
+     *
      */
     public void reset() {
         game.eraseStates();
@@ -96,7 +106,7 @@ public class Ball extends Item {
         game.getPlayer().setCanMove(false);
         game.getPlayer().setSpeed(8);
         game.setStatesCounter(0);
-        
+
     }
 
     /**
@@ -117,6 +127,13 @@ public class Ball extends Item {
         this.ySpeed = ySpeed;
     }
 
+    /**
+     * Modifies the speed of the ball depending on the impact zone with the
+     * player
+     *
+     * @param playerWidth
+     * @param playerxPosition
+     */
     public void bounceAtPlayer(int playerWidth, int playerxPosition) {
 
         int playerSection = playerWidth / 5;
@@ -138,12 +155,17 @@ public class Ball extends Item {
         }
     }
 
+    /**
+     * Modifies the speed of the ball depending on the impact zone with the
+     * scenario
+     *
+     * @param side
+     */
     public void bounce(Side side) {
         // Top side
-        if (side == Side.TOP){
+        if (side == Side.TOP) {
             setySpeed(SPEED);
-        } 
-        // Left side
+        } // Left side
         else if (side == Side.LEFT) {
             setxSpeed(SPEED);
         } // Bottom side
@@ -156,7 +178,7 @@ public class Ball extends Item {
     }
 
     /**
-     * Creates a Circle object and simulates the "Hitbox" of the ball
+     * Creates a Circle object and simulates the "hit box" of the ball
      *
      * @return new Circle
      */
@@ -164,50 +186,85 @@ public class Ball extends Item {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
+    /**
+     * Checks if there was a collision with another instance and returns a
+     * boolean
+     *
+     * @param obj
+     * @return <code>boolean</code>
+     */
     public boolean intersecta(Object obj) {
         return (obj instanceof Meth && getHitbox().intersects(((Meth) (obj)).getPerimetro())
                 || obj instanceof Player && getHitbox().intersects(((Player) (obj)).getPerimetro()));
     }
 
-    public void save(Formatter file){
+    /**
+     * Writes it's data in the saving file
+     *
+     * @param file
+     */
+    public void save(Formatter file) {
         file.format("%s%s%s%s", getX() + " ", getY() + " ", getxSpeed() + " ", getySpeed() + " ");
     }
-    
-    public void load(int x, int y, int xspeed, int yspeed){
+
+    /**
+     * Loads it's necessary data from a file
+     *
+     * @param x
+     * @param y
+     * @param xspeed
+     * @param yspeed
+     */
+    public void load(int x, int y, int xspeed, int yspeed) {
         setX(x);
         setY(y);
         setxSpeed(xspeed);
         setySpeed(yspeed);
     }
-    
+
+    /**
+     * Ticker for the class
+     */
     @Override
     public void tick() {
+        // Ticks for the animaiton
         currentAnimation.tick();
+
+        // Only updates if it's movable
         if (isMovable()) {
             setY(getY() + getySpeed());
             setX(getX() + getxSpeed());
         }
-        // Reset x position and y position if colision with the canvas
-        if (getX() + getWidth() > getGame().getWidth()) {   // right side
+
+        // Reset x position and y position if colision with the canvas laterals
+        if (getX() + getWidth() > getGame().getWidth()) {   // Right side
             setX(getGame().getWidth() - getWidth());
             bounce(Side.RIGHT);
-        } else if (getX() < 0) {                            // left side
+        } else if (getX() < 0) {                            // Left side
             setX(0);
             bounce(Side.LEFT);
         }
 
-        if (getY() >= getGame().getHeight() - getHeight()) { //down
+        // Reset x position and y position if colision with the canvas top and bottom
+        if (getY() >= getGame().getHeight() - getHeight()) { // Bottom side
+            // When it collides with the bottom side, it looses one life and
+            // the sound it's play, and calls the reset function
             Assets.lifeLost.play();
             setY(getGame().getHeight() - getHeight());
             reset();
             getGame().setLives(getGame().getLives() - 1);
             getGame().getPowerUps().clear();
-        } else if (getY() <= 0) { // up
+        } else if (getY() <= 0) {                              // Top side
             setY(0);
             bounce(Side.TOP);
         }
     }
 
+    /**
+     * Renders the ball on canvas
+     *
+     * @param g
+     */
     @Override
     public void render(Graphics g) {
         g.drawImage(currentAnimation.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
