@@ -307,6 +307,11 @@ public class Game implements Runnable {
         if (!isPaused) {
             player.tick();
             ball.tick();
+            
+            if (methbricks.size() == 0){
+                gameEnded = true;
+            }
+            
             if (states.get(STATEBOOST) || states.get(STATEGROWTH)){
                 statesCounter++;
             }
@@ -411,7 +416,12 @@ public class Game implements Runnable {
                     powerUps.get(i).render(g);
                 }
             } else {
-                g.drawImage(Assets.gameOverScreen, 0, 0, width, height, null);
+                if (methbricks.size() == 0) {
+                    System.out.println("You Win!");
+                } 
+                else {
+                    g.drawImage(Assets.gameOverScreen, 0, 0, width, height, null);
+                }
                 ball.setxSpeed(0);
                 ball.setySpeed(0);
                 player.setCanMove(false);
