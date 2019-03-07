@@ -40,6 +40,17 @@ public class PowerUp extends Item {
             this.type = Type.GROWTH;
         }
      }
+    
+    public PowerUp(int x, int y, int width, int height, String type) {
+        super(x, y, width, height);
+        this.speed = 3;
+//        this.type = Type.BOOST;
+        if (type.equals("BOOST")) {
+            this.type = Type.BOOST;
+        } else if (type.equals("GROWTH")) {
+            this.type = Type.GROWTH;
+        }     
+     }
 
     public int getX() {
         return x;
@@ -98,7 +109,7 @@ public class PowerUp extends Item {
     }  
     
     public void save(Formatter file){
-        file.format("%s%s%s", getX() + " ", getY() + " ", getType().toString()+ " ");
+        file.format("%s%s%s%s%s", getX() + " ", getY() + " ", getWidth() + " ", getHeight() + " ", getType().toString() + " ");
     }
     
     @Override

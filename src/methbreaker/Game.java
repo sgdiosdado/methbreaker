@@ -176,6 +176,12 @@ public class Game implements Runnable {
             
             powerUp.save(file);
         }
+        file.format("%s", methbricks.size() + " ");
+        for (int i = 0 ; i < methbricks.size(); i++) {
+            Meth meth = methbricks.get(i);
+            
+            meth.save(file);
+        }
         
         file.close();
     }
@@ -183,12 +189,16 @@ public class Game implements Runnable {
     private void load(){
         try{
             int x, y, xspeed, yspeed, width, height;
+            String type;
             scanner = new Scanner(new File("game.txt"));
             x = scanner.nextInt();
             y = scanner.nextInt();
             xspeed = scanner.nextInt();
             yspeed = scanner.nextInt();
             ball.load(x, y, xspeed, yspeed);
+            if (xspeed > 0 || yspeed > 0) {
+                ball.setMovable(true);
+            } 
             x = scanner.nextInt();
             y = scanner.nextInt();
             xspeed = scanner.nextInt();
@@ -199,6 +209,28 @@ public class Game implements Runnable {
             y = scanner.nextInt();
             setScore(x);
             setLives(y);
+            int numOfPowerUps = scanner.nextInt();
+            powerUps.clear();
+            
+            for (int i = 0; i < numOfPowerUps; i++) {
+                x = scanner.nextInt();
+                y = scanner.nextInt();
+                width = scanner.nextInt();
+                height = scanner.nextInt();
+                type = scanner.next();
+                powerUps.add(new PowerUp(x, y, width, height, type));
+            }
+            
+            int numOfMethbricks = scanner.nextInt();
+            methbricks.clear();
+            
+            for (int i = 0; i < numOfMethbricks; i++) {
+                x = scanner.nextInt();
+                y = scanner.nextInt();
+                width = scanner.nextInt();
+                height = scanner.nextInt();
+                methbricks.add(new Meth(x, y, width, height, this));
+            }
             
         } catch(Exception e){
             // Cambiar
@@ -291,7 +323,7 @@ public class Game implements Runnable {
                 // checking collision between player and bad
                 if (ball.intersecta(meth)) {
                     Assets.brickBreaking.play();
-                    if (Math.random() < 0.1) {
+                    if (Math.random() < 0.9) {
                         powerUps.add(new PowerUp((meth.getX() + meth.getWidth() / 2) - 16, meth.getY() + meth.getHeight() + 32, 32, 32));
                     }
                     if (ball.getY() > meth.getY()) {
