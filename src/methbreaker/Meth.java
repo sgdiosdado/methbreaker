@@ -7,6 +7,7 @@ package methbreaker;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.Formatter;
 
 /**
  *
@@ -24,6 +25,10 @@ public class Meth extends Item {
     
     public Rectangle getPerimetro() {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+    
+    public void save(Formatter file){
+        file.format("%s%s%s%s", getX() + " ", getY() + " ", getWidth() + " ", getHeight() + " ");
     }
     
     @Override
